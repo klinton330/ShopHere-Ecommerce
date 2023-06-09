@@ -28,7 +28,7 @@ public class UserRepositoryTest {
 	{
 		//getting roles from Roles table using the TestEntityManager
 		Role admin=testEntityManager.find(Role.class, 1);
-		User userHari=new User("hari@gmail.com", "hari","Hari", "Ram","JPEG");
+		User userHari=new User("ravi@gmail.com", "ravi","ravi", "ravi","JPEG");
 		userHari.addRole(admin);
 		User savedUser=userRepository.save(userHari);
 		assertThat(savedUser.getId()).isGreaterThan(0);

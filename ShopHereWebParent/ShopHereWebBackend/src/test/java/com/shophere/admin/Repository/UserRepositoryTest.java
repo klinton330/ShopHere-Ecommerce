@@ -84,4 +84,11 @@ public class UserRepositoryTest {
 		Integer userId=11;
 		userRepository.deleteById(userId);
 	}
+	@Test
+	public void testEmailUniqueness()
+	{
+		String email="dhoni@gmail.com";
+		User user=userRepository.getUserByEmail(email);
+		assertThat(user).isNotNull();
+	}
 }

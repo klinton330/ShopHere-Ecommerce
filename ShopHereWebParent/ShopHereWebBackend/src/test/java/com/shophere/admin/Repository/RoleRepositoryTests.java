@@ -31,12 +31,14 @@ public class RoleRepositoryTests {
 	@Test
 	public void testRestRole()
 	{
+		Role roleAdmin=new Role(
+				"Admin","Manages Everything");
 		Role roleSalesparson=new Role("Salesperson","Manage Products price,Customers,Shipping,orders and sales Report");
 		Role roleEditor=new Role("Editor","Manage Catagories,Brands,products,article and menus");
 		Role roleShipper=new Role("Shipper","View Products,view orders and update order status");
 		Role roleAssistant=new Role("Assistant","Manage Questions and reviews");
 		
-		role.saveAll(List.of(roleSalesparson,roleEditor,roleShipper,roleAssistant));
+		role.saveAll(List.of(roleAdmin,roleSalesparson,roleEditor,roleShipper,roleAssistant));
 		
 	}
 }

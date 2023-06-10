@@ -58,9 +58,9 @@
 	background-color: #7e1d53;
 	color: white;
 }
-.table-content
-{
-    margin:50px;
+
+.table-content {
+	margin: 50px;
 }
 </style>
 <body>
@@ -103,48 +103,106 @@
 			</div>
 		</div>
 	</nav>
-	<div class="pl-5">
-		<h2 class="text-center">Manage User</h2>
-		<a th:href="@{/users/new}">New Users</a>
-	</div>
-
-     
-	<div th:if="${message!=null}" class="alert alert-success text-center">
-	   [[${message}]]
-	</div>
-	<div class="table-content">
-		<table class="table table-bordered table-striped table-hover table-responsive-xl">
-			<thead class="thead-dark">
-				<tr>
-					<th>User ID</th>
-					<th>Email</th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Roles</th>
-					<th>Photos</th>
-					<th>Enabled</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-
-			<tbody>
-				<tr th:each="user:${listusers}">
-					<td>[[${user.id}]]</td>
-					<td>[[${user.email}]]</td>
-					<td>[[${user.firstName}]]</td>
-					<td>[[${user.lastname}]]</td>
-					<td>[[${user.roles}]]</td>
-					<td>[[${user.photos}]]</td>
-					<td>[[${user.enabled}]]</td>
-					<td>Edit &nbsp; Delete</td>
-
-				</tr>
-			</tbody>
-		</table>
+	<div>
+		<h2 class="text-center pt-1">Manage User|Create New User</h2>
 	</div>
 	
+
+	<form th:action="@{/users/save}" method="post"
+		style="max-width: 700px; margin: 0 auto" th:object="${user}"
+		autocomplete="off" onsubmit="return checkUniqueEmail(this)">
+		<div class="border border-secondary rounded p-3">
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">E-mail</label>
+				<div class="col-sm-8">
+					<input type="email" class="form-control" th:field="*{email}" id="email"
+						required minlength="8" maxlength="128" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">First Name</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{firstName}"
+						required minlength="2" maxlength="128" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Last Name</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{lastname}"
+						required minlength="2" maxlength="128" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Password</label>
+				<div class="col-sm-8">
+					<input type="password" class="form-control" th:field="*{password}"
+						required minlength="8" maxlength="20" />
+				</div>
+			</div>
+
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Roles</label>
+				<div class="col-sm-8">
+					<th:block th:each="role:${listRoles}">
+						<input type="checkbox" th:field="*{roles}" th:text="${role.name}"
+							th:value="${role.id}" class="m-2" />-
+                        <small>[[${role.description}]]</small>
+						<br />
+					</th:block>
+				</div>
+			</div>
+			
+			
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Enabled</label>
+				<div class="col-sm-8">
+					<input type="checkbox" th:field="*{enabled}" />
+				</div>
+			</div>
+
+			<div class="text-center">
+				<input type="submit" value="Save" class="btn btn-primary m-3">'
+				<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel">
+			</div>
+		</div>
+
+	</form>
+
 	<div class="text-center">
-	  <p>ShopHere Control Panel-Copyright &copy; ShopHere </p>
+		<p>ShopHere Control Panel-Copyright &copy; ShopHere</p>
 	</div>
 </body>
+
+<script type="text/javascript"> 
+  $(document).ready(function(){
+     $("#buttonCancel").on("click",function(){
+       window.location="[[@{/users}]]"
+     })
+  })
+  
+  function checkUniqueEmail(form)
+  {
+    var url="[[@{/users/checkemail}]]";
+    var userEmail=$("#email").val();
+    var csrf=$("input[name='_csrf']").val();
+    var params={email:userEmail,_csrf:csrf};
+    $.post(url,params, function(response){
+       if(response=="OK")
+       {
+         form.submit();
+       }
+       else if(response="DUPLICATED")
+       {
+         alert("This email is taken by another user")
+       }
+    }
+    );
+    return false
+  }
+</script>
 </html>

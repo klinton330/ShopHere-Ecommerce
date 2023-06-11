@@ -3,11 +3,13 @@ package com.shophere.admin.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shophere.admin.Repository.RoleRepository;
 import com.shophere.admin.Repository.UserRepository;
+import com.shophere.admin.exception.ResourceNotFoundException;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
@@ -48,5 +50,20 @@ public class UserService {
 	{
 		User userByEmail=userRepository.getUserByEmail(email);
 		return userByEmail==null;
+	}
+
+	public User getUser(Integer id) {
+		try
+		{
+		User user=userRepository.findById(id).get();
+		return user;
+		}
+		catch(UsernameNotFoundException ex)
+		{
+			throw new UsernameNotFoundException("Could not find the User with Id:"+id);
+		}
+				
+               
+		
 	}
 }

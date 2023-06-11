@@ -5,6 +5,9 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0">
 <title>Home-ShopHere Admin</title>
+<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 <link rel="stylesheet" type="text/css"
 	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 <link rel="stylesheet" type="text/css"
@@ -58,9 +61,9 @@
 	background-color: #7e1d53;
 	color: white;
 }
-.table-content
-{
-    margin:50px;
+
+.table-content {
+	margin: 50px;
 }
 </style>
 <body>
@@ -108,12 +111,12 @@
 		<a th:href="@{/users/new}">New Users</a>
 	</div>
 
-     
+
 	<div th:if="${message!=null}" class="alert alert-success text-center">
-	   [[${message}]]
-	</div>
+		[[${message}]]</div>
 	<div class="table-content">
-		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+		<table
+			class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
 				<tr>
 					<th>User ID</th>
@@ -134,17 +137,23 @@
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastname}]]</td>
 					<td>[[${user.roles}]]</td>
-					<td>[[${user.photos}]]</td>
-					<td>[[${user.enabled}]]</td>
-					<td>Edit &nbsp; Delete</td>
+					<td><span class="fas fa-regular fa-user fa-2x icon-green"></span></td>
+					<td><a th:if="${user.enabled==true}"
+						class="fas fa-check-circle fa-lg" style="color: #70db06;"  title="Edit the user"></a>
+						
+						<a th:if="${user.enabled==false}"
+						class="fas fa-check-circle fa-lg" style="color: black;" ></a></td>
+					<td><a class="fas fa-user-edit fa-lg" style="color: #007bff"
+						th:href="@{'/users/edit/'+${user.id}}"></a> <span>|</span> <a class="fas fa-trash-alt fa-lg"
+						style="color: #f50000;" th:href="@{/}"></a></td>
 
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div class="text-center">
-	  <p>ShopHere Control Panel-Copyright &copy; ShopHere </p>
+		<p>ShopHere Control Panel-Copyright &copy; ShopHere</p>
 	</div>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class User {
 	private String firstName;
 	@Column(name="last_name",length = 45,nullable = false)
 	private String lastname;
-	@Column(length = 64)
+	
 	private String photos;
 	private boolean enabled;
 	

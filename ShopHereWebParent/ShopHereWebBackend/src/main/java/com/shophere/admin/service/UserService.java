@@ -15,55 +15,70 @@ import com.shopme.common.entity.User;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	public List<User>listAll()
-	{
+
+	public List<User> listAll() {
 		return (List<User>) userRepository.findAll();
 	}
-	
-	public List<Role>listRoles()
-	{
+
+	public List<Role> listRoles() {
 		return (List<Role>) roleRepository.findAll();
 	}
-	
-	public void saveUser(User user)
-	{
-		encodePassword(user);
+
+	public void saveUser(User user) {
+		boolean isUpdatingUser = (user.getId() != null);
+		if (isUpdatingUser) {
+			// Update Logic
+			// existingUser ->Having the Existing user Details.
+			// user-Having the update details
+			User existingUser = userRepository.findById(user.getId()).get();
+			// Check if user is updating password
+			if (user.getPassword().isEmpty()) {
+				// No means set existing User Password
+				user.setPassword(existingUser.getPassword());
+			} else
+				encodePassword(user);
+		} else {
+			encodePassword(user);
+		}
 		userRepository.save(user);
 	}
-	
-	private void encodePassword(User user)
-	{
-		String encodePassword=passwordEncoder.encode(user.getPassword());
+
+	private void encodePassword(User user) {
+		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
 	}
 
-	
-	public boolean isEmailUnique(String email)
-	{
-		User userByEmail=userRepository.getUserByEmail(email);
-		return userByEmail==null;
+	public boolean isEmailUnique(Integer id, String email) {
+		User userByEmail = userRepository.getUserByEmail(email);
+		// If our email id is unique and not db
+		if (userByEmail == null)
+			return true;
+		boolean iscreatingNew = (id == null);
+		// While creating if we try to create with other user email id
+		if (iscreatingNew) {
+			if (userByEmail != null)
+				return false;
+		} else {
+			// This check for if we try to update other user email id with ours
+			if (userByEmail.getId() != id)
+				return false;
+		}
+		return true;
 	}
 
 	public User getUser(Integer id) {
-		try
-		{
-		User user=userRepository.findById(id).get();
-		return user;
+		try {
+			User user = userRepository.findById(id).get();
+			return user;
+		} catch (Exception ex) {
+			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		}
-		catch(UsernameNotFoundException ex)
-		{
-			throw new UsernameNotFoundException("Could not find the User with Id:"+id);
-		}
-				
-               
-		
 	}
 }

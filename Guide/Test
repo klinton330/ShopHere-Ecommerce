@@ -1,0 +1,3 @@
+How the pull code from Master in STS
+
+Right Click on Parent Project->Teams->Pull...->Reference=Master->Click Finish

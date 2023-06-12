@@ -34,14 +34,20 @@ public class UserController {
 		User userObj = new User();
 		model.addAttribute("user", userObj);
 		model.addAttribute("listRoles", listRoles);
+		model.addAttribute("pageTitle", "Create New User");
 		return "user-form";
 	}
 
 	@PostMapping("/users/save")
 	public String saveUser(User userObj, RedirectAttributes redirectAttributes) {
-		System.out.println(userObj);
+		boolean isNewUser = false;
+		if (userObj.getId() == null)
+			isNewUser = true;
 		userService.saveUser(userObj);
-		redirectAttributes.addFlashAttribute("message", "The user has been saved Successfully");
+		if (isNewUser)
+			redirectAttributes.addFlashAttribute("message", "The user has been saved Successfully");
+		else
+			redirectAttributes.addFlashAttribute("message", "The user has been Updated Successfully");
 		return "redirect:/users";
 	}
 
@@ -51,6 +57,9 @@ public class UserController {
 			User userObj = userService.getUser(id);
 			System.out.println(userObj);
 			model.addAttribute("user", userObj);
+			model.addAttribute("pageTitle", "Edit User:" + id);
+			List<Role> listRoles = userService.listRoles();
+			model.addAttribute("listRoles", listRoles);
 			return "user-form";
 		} catch (UsernameNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());

@@ -11,5 +11,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	
     @Query(value="SELECT * FROM users u WHERE u.email= :email",nativeQuery = true )
 	 public User getUserByEmail(@Param("email")String email);
+    
+    public Long countById(Integer id);
 
 }

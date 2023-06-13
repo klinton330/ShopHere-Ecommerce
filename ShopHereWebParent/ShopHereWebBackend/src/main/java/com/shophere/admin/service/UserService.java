@@ -81,4 +81,13 @@ public class UserService {
 			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		}
 	}
+	
+	public void delete(Integer id)
+	{
+		Long countById=userRepository.countById(id);
+		if(countById==null||countById==0)
+			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
+		else
+			userRepository.deleteById(id);
+	}
 }

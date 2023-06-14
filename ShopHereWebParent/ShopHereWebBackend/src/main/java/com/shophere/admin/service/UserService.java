@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shophere.admin.Repository.RoleRepository;
 import com.shophere.admin.Repository.UserRepository;
@@ -14,6 +15,7 @@ import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -89,5 +91,10 @@ public class UserService {
 			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		else
 			userRepository.deleteById(id);
+	}
+	
+	public void updateUserEnabledService(Integer id,boolean enabled)
+	{
+		userRepository.updateEnabledStatus(id, enabled);
 	}
 }

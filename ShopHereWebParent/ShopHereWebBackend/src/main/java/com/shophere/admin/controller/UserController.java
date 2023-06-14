@@ -66,17 +66,27 @@ public class UserController {
 			return "redirect:/users";
 		}
 	}
-	
+
 	@GetMapping("users/delete/{id}")
-	public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes)
-	{
+	public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 		try {
 			userService.delete(id);
-			redirectAttributes.addFlashAttribute("message","The User Id: "+id+" has been deleted Successfully");
+			redirectAttributes.addFlashAttribute("message", "The User Id: " + id + " has been deleted Successfully");
 			return "redirect:/users";
 		} catch (UsernameNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
 		}
 	}
+
+	@GetMapping("/users/{id}/enabled/{status}")
+	public String enableAndDiableUser(@PathVariable("id") Integer id, @PathVariable("status") boolean status,
+			RedirectAttributes redirectAttributes) {
+             userService.updateUserEnabledService(id, status);
+             String statusMessage=status?"enabled":"disabled";
+             String message="The User ID "+id+" has Been "+statusMessage;
+             redirectAttributes.addFlashAttribute("message", message);
+             return "redirect:/users";
+	}
+
 }

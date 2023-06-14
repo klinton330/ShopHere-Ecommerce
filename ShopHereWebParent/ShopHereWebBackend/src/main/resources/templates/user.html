@@ -129,13 +129,21 @@
 					<td>[[${user.lastname}]]</td>
 					<td>[[${user.roles}]]</td>
 					<td><span class="fas fa-regular fa-user fa-2x icon-green"></span></td>
-					<td><a th:if="${user.enabled==true}" class="fas fa-check-circle fa-lg" style="color: #70db06;"
-							title="Edit the user"></a>
+					<td><a th:if="${user.enabled==true}" 
+					            class="fas fa-check-circle fa-lg" 
+					            style="color: #70db06;"
+					            th:href="@{'/users/'+${user.id}+'/enabled/false'}"
+					             title="Disable user"
+							></a>
 
-						<a th:if="${user.enabled==false}" class="fas fa-check-circle fa-lg" style="color: black;"></a>
+						<a th:if="${user.enabled==false}" 
+						     class="fas fa-check-circle fa-lg" 
+						     style="color: black;"
+						      th:href="@{'/users/'+${user.id}+'/enabled/true'}"
+						      title="Enable user"></a>
 					</td>
 					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-							th:href="@{'/users/edit/'+${user.id}}"></a> <span>|</span> <a
+							th:href="@{'/users/edit/'+${user.id}}" title="Edit the user"></a> <span>|</span> <a
 							class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
 							th:href="@{'/users/delete/'+${user.id}}" th:userId="${user.id}" title="Delete the User"></a>
 					</td>

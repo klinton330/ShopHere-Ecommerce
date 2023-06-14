@@ -99,4 +99,16 @@ public class UserRepositoryTest {
 		User user=userRepository.getUserByEmail(email);
 		assertThat(user).isNotNull();
 	}
+	@Test
+	public void testDisableUser()
+	{
+		Integer id=1;
+		userRepository.updateEnabledStatus(id, false);
+	}
+	@Test
+	public void testEnableUser()
+	{
+		Integer id=1;
+		userRepository.updateEnabledStatus(id, true);
+	}
 }

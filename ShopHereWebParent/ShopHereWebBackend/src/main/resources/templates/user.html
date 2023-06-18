@@ -128,7 +128,9 @@
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastname}]]</td>
 					<td>[[${user.roles}]]</td>
-					<td><span class="fas fa-regular fa-user fa-2x icon-green"></span></td>
+					<td><img th:if="${user.photos==null}"  th:src="@{${user.photoImagePath}}" style="width: 100px; height: 100px"/>
+					<img th:if="${user.photos!=null}" th:src="@{${user.photoImagePath}}" style="width: 100px; height: 100px"/></td>
+					
 					<td><a th:if="${user.enabled==true}" 
 					            class="fas fa-check-circle fa-lg" 
 					            style="color: #70db06;"

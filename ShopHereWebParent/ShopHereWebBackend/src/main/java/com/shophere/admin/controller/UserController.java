@@ -1,5 +1,6 @@
 package com.shophere.admin.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mysql.cj.util.StringUtils;
 import com.shophere.admin.service.UserService;
+import com.shophere.admin.utils.FileUploadUtil;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
@@ -39,7 +44,24 @@ public class UserController {
 	}
 
 	@PostMapping("/users/save")
-	public String saveUser(User userObj, RedirectAttributes redirectAttributes) {
+	public String saveUser(User userObj, RedirectAttributes redirectAttributes,
+			@RequestParam("image") MultipartFile multipartFile) throws IOException {
+
+		if (!multipartFile.isEmpty()) {
+			// To get the File Name
+			String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			userObj.setPhotos(fileName);
+			User savedUser = userService.saveUser(userObj);
+			String upload = "user-photos/" + savedUser.getId();
+			// Saving the image inside project Directory
+			FileUploadUtil.cleanDir(upload);
+			FileUploadUtil.saveFile(upload, fileName, multipartFile);
+
+		} else {
+			if (userObj.getPhotos().isEmpty())
+				userObj.setPhotos(null);
+		}
+
 		boolean isNewUser = false;
 		if (userObj.getId() == null)
 			isNewUser = true;
@@ -82,11 +104,11 @@ public class UserController {
 	@GetMapping("/users/{id}/enabled/{status}")
 	public String enableAndDiableUser(@PathVariable("id") Integer id, @PathVariable("status") boolean status,
 			RedirectAttributes redirectAttributes) {
-             userService.updateUserEnabledService(id, status);
-             String statusMessage=status?"enabled":"disabled";
-             String message="The User ID "+id+" has Been "+statusMessage;
-             redirectAttributes.addFlashAttribute("message", message);
-             return "redirect:/users";
+		userService.updateUserEnabledService(id, status);
+		String statusMessage = status ? "enabled" : "disabled";
+		String message = "The User ID " + id + " has Been " + statusMessage;
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/users";
 	}
 
 }

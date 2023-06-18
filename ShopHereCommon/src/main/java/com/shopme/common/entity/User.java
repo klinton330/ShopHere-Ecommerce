@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="users")
@@ -31,6 +32,8 @@ public class User {
 	
 	private String photos;
 	private boolean enabled;
+	
+	private String photoImagePath;
 	
 	@ManyToMany
 	@JoinTable(name="user_roles",
@@ -108,8 +111,23 @@ public class User {
 		return "User [email=" + email + ", password=" + password + ", firstName=" + firstName + ", lastname=" + lastname
 				+ ", photos=" + photos + ", roles=" + roles + "]";
 	}
+
+	@Transient
+	public String getPhotoImagePath() {
+		if(id==null||photos==null)
+		{
+			System.out.println("/images/default.jpg");
+			 return "/images/default.jpg"; 
+		}
+		System.out.println("/user-photos/"+this.id+"/"+this.photos);
+		return "/user-photos/"+this.id+"/"+this.photos;
+	}
 	
-	
+	/*
+	 * @Transient public String getPhotosImagePath() { if(id==null||photos==null)
+	 * return "/images/default.jpg"; return "/user-photos/"+this.id+"/"+this.photos;
+	 * }
+	 */
 	
 	
 	

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.mysql.cj.util.StringUtils;
 import com.shophere.admin.service.UserService;
 import com.shophere.admin.utils.FileUploadUtil;
 import com.shopme.common.entity.Role;

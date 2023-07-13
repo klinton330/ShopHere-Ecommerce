@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,7 @@ public class UserController {
 
 	@GetMapping("users")
 	public String displayFirstPage(Model model) {
-		return listByPage(1, model);
+		return listByPage(1, model,"firstName","asc",null);
 	}
 
 	@GetMapping("/users/new")
@@ -75,7 +76,6 @@ public class UserController {
 	public String editUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			User userObj = userService.getUser(id);
-			System.out.println(userObj);
 			model.addAttribute("user", userObj);
 			model.addAttribute("pageTitle", "Edit User:" + id);
 			List<Role> listRoles = userService.listRoles();
@@ -108,12 +108,16 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/users";
 	}
-
+   
+	//http://localhost:8085/ShopHereAdmin/users/page/1?sortField=email&sortDir=asc
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable(name="pageNum")int pageNum,Model model)
+	public String listByPage(@PathVariable(name="pageNum")int pageNum,Model model,@Param("sortField")
+	String sortField,@Param("sortOrder") String sortDir,@Param("keyword")String keyword)
 	{
-		Page<User> page=userService.listByPage(pageNum);
-	
+		  System.out.println("SortField:"+sortField);
+		  System.out.println("SortOrder:"+sortDir);
+		Page<User> page=userService.listByPage(pageNum,sortField,sortDir,keyword);
+	  
 		List<User>listUsers=page.getContent();
 		long startCount=(pageNum-1)*userService.USER_PER_PAGE+1; //0,5
 		long endCount=startCount+ userService.USER_PER_PAGE-1;//4,9no
@@ -121,12 +125,18 @@ public class UserController {
 		{
 			endCount=page.getTotalElements();
 		}
+		String reverseSortDir=sortDir.equalsIgnoreCase("asc")?"desc":"asc";
 		model.addAttribute("totalPage", page.getTotalPages());
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("startCount", startCount);
 		model.addAttribute("endCount",endCount);
 		model.addAttribute("listusers", listUsers);
 		model.addAttribute("totalItems",page.getTotalElements());
+		model.addAttribute("SortField", sortField);
+		model.addAttribute("SortDir", sortDir);
+		model.addAttribute("SortField", sortField);
+		model.addAttribute("reverseSortDir",  reverseSortDir);
+		model.addAttribute("keyword",  keyword);
 		return "user";
 		
 		

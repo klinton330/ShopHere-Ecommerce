@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import com.shopme.common.entity.User;
 @Transactional
 public class UserService {
 
-	public static final int USER_PER_PAGE=5;
+	public static final int USER_PER_PAGE = 5;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -33,11 +34,15 @@ public class UserService {
 		return (List<User>) userRepository.findAll();
 	}
 
-	public Page<User>listByPage(int pageNum)
-	{
-		Pageable pageable=PageRequest.of(pageNum-1, USER_PER_PAGE);
+	public Page<User> listByPage(int pageNum, String sortField, String sortDir,String keyword) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNum - 1, USER_PER_PAGE, sort);
+		if(keyword!=null)
+			return userRepository.findAll(keyword,pageable);
 		return userRepository.findAll(pageable);
 	}
+
 	public List<Role> listRoles() {
 		return (List<Role>) roleRepository.findAll();
 	}
@@ -92,18 +97,16 @@ public class UserService {
 			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		}
 	}
-	
-	public void delete(Integer id)
-	{
-		Long countById=userRepository.countById(id);
-		if(countById==null||countById==0)
+
+	public void delete(Integer id) {
+		Long countById = userRepository.countById(id);
+		if (countById == null || countById == 0)
 			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		else
 			userRepository.deleteById(id);
 	}
-	
-	public void updateUserEnabledService(Integer id,boolean enabled)
-	{
+
+	public void updateUserEnabledService(Integer id, boolean enabled) {
 		userRepository.updateEnabledStatus(id, enabled);
 	}
 }

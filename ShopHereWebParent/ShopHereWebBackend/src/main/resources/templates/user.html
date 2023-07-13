@@ -2,107 +2,96 @@
 <html xmlns:th="https://thymeleaf.org">
 
 <head>
-<!-- <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">-->
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0">
-<title>Home-ShopHere Admin</title>
-<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<!-- <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0">
+	<title>Home-ShopHere Admin</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
 
-<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/src/main/resources/static/css/index.css}" />
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/src/main/resources/static/css/index.css}" />
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Roboto', sans-serif;
-}
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Roboto', sans-serif;
+	}
 
-#navbar {
-	position: sticky;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	padding: .5rem 5rem;
-	background: #189bf3;
-}
+	#navbar {
+		position: sticky;
+		top: 0;
+		left: 0;
+		z-index: 100;
+		padding: .5rem 5rem;
+		background: #189bf3;
+	}
 
-.navbar .navbar-brand {
-	font-size: 25px;
-	font-weight: 600;
-	color: #fff;
-	letter-spacing: 4px;
-}
+	.navbar .navbar-brand {
+		font-size: 25px;
+		font-weight: 600;
+		color: #fff;
+		letter-spacing: 4px;
+	}
 
-#navbarSupportedContent a {
-	color: #fff;
-	border-bottom: 2px solid transparent;
-}
+	#navbarSupportedContent a {
+		color: #fff;
+		border-bottom: 2px solid transparent;
+	}
 
-#navbarSupportedContent a:hover {
-	border-bottom: 2px solid #7e1d53;
-	;
-}
+	#navbarSupportedContent a:hover {
+		border-bottom: 2px solid #7e1d53;
+		;
+	}
 
-#navbarSupportedContent button {
-	background-color: #ffffff;
-	width: 5rem;
-	border-radius: 15px;
-	color: black;
-	border: none;
-}
+	#navbarSupportedContent button {
+		background-color: #ffffff;
+		width: 5rem;
+		border-radius: 15px;
+		color: black;
+		border: none;
+	}
 
-#navbarSupportedContent button:hover {
-	background-color: #7e1d53;
-	color: white;
-}
+	#navbarSupportedContent button:hover {
+		background-color: #7e1d53;
+		color: white;
+	}
 
-.table-content {
-	margin: 50px;
-}
+	.table-content {
+		margin: 50px;
+	}
 </style>
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark stroke" id="navbar">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><b>Shop</b>-Here</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
 				aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-auto">
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/users}">Users</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/users}">Users</a>
+					</li>
 
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Catagories</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Catagories</a>
+					</li>
 
 
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Brands</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Products</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Brands</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Products</a></li>
 
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Customers</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Shipping</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Reports</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Menus</a></li>
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" th:href="@{/}">Setting</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Customers</a>
+					</li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Shipping</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Reports</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Menus</a></li>
+					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Setting</a></li>
 				</ul>
 				<button class="btn btn-primary">Sign In</button>
 
@@ -114,17 +103,33 @@
 		<a th:href="@{/users/new}">New Users</a>
 	</div>
 
-
+	<div  class="pl-5 mt-2">
+		<form th:action="@{/users/page/1}" class="form-inline">
+			Filter: &nbsp;
+			<input type="hidden" name="sortField" th:value="${SortField}"/>
+			<input type="hidden" name="sortDir" th:value="${SortDir}"/>
+			<input type="search" name="keyword" th:value="${keyword}"class="form-control" required /> &nbsp;&nbsp;
+			<input type="submit" value="Search" class="btn btn-primary"/> &nbsp;
+		    <input type="reset" value="Clear" class="btn btn-danger" onclick="clearFeature()"/>
+		</form>
+	</div>
 	<div th:if="${message!=null}" class="alert alert-success text-center">
 		[[${message}]]</div>
 	<div class="table-content">
-		<table
-			class="table table-bordered table-striped table-hover table-responsive-xl">
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
 				<tr>
 					<th>User ID</th>
 					<th>Email</th>
-					<th>First Name</th>
+					<th><a th:if="${SortField!='firstName'}" class="text-white"
+							th:href="@{'/users/page/'+${currentPage}+'?sortField=firstName&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First
+							Name</a>
+						<a th:if="${SortField=='firstName'}" class="text-white"
+							th:href="@{'/users/page/'+${currentPage}+'?sortField=firstName&sortDir='+${reverseSortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First
+							Name</a>
+						<span th:if="${SortField=='firstName'}"
+							th:class="${SortDir=='asc'?'fas fa-sort-up':'fas fa-sort-down'}"></span>
+					</th>
 					<th>Last Name</th>
 					<th>Roles</th>
 					<th>Photos</th>
@@ -140,25 +145,19 @@
 					<td>[[${user.firstName}]]</td>
 					<td>[[${user.lastname}]]</td>
 					<td>[[${user.roles}]]</td>
-					<td><img th:if="${user.photos==null}"
-						th:src="@{${user.photoImagePath}}"
-						style="width: 100px; height: 100px" /> <img
-						th:if="${user.photos!=null}" th:src="@{${user.photoImagePath}}"
-						style="width: 100px; height: 100px" /></td>
+					<td><img th:if="${user.photos==null}" th:src="@{${user.photoImagePath}}"
+							style="width: 100px; height: 100px" /> <img th:if="${user.photos!=null}"
+							th:src="@{${user.photoImagePath}}" style="width: 100px; height: 100px" /></td>
 
-					<td><a th:if="${user.enabled==true}"
-						class="fas fa-check-circle fa-lg" style="color: #70db06;"
-						th:href="@{'/users/'+${user.id}+'/enabled/false'}"
-						title="Disable user"></a> <a
-						th:if="${user.enabled==false}" class="fas fa-check-circle fa-lg"
-						style="color: black;"
-						th:href="@{'/users/'+${user.id}+'/enabled/true'}"
-						title="Enable user"></a></td>
-					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-						th:href="@{'/users/edit/'+${user.id}}" title="Edit the user"></a>
-						<span>|</span> <a class="fas fa-trash-alt fa-lg link-delete"
-						style="color: #f50000;" th:href="@{'/users/delete/'+${user.id}}"
-						th:userId="${user.id}" title="Delete the User"></a></td>
+					<td><a th:if="${user.enabled==true}" class="fas fa-check-circle fa-lg" style="color: #70db06;"
+							th:href="@{'/users/'+${user.id}+'/enabled/false'}" title="Disable user"></a> <a
+							th:if="${user.enabled==false}" class="fas fa-check-circle fa-lg" style="color: black;"
+							th:href="@{'/users/'+${user.id}+'/enabled/true'}" title="Enable user"></a></td>
+					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff" th:href="@{'/users/edit/'+${user.id}}"
+							title="Edit the user"></a>
+						<span>|</span> <a class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
+							th:href="@{'/users/delete/'+${user.id}}" th:userId="${user.id}" title="Delete the User"></a>
+					</td>
 
 				</tr>
 			</tbody>
@@ -170,14 +169,24 @@
 		<div class="text-center m-1" th:unless="${totalItems>0}">
 			<span>No UserFound</span>
 		</div>
-        <div>
+		<div th:if="${totalItems>0}">
 			<nav>
-				<ul class="pagination justify-content-center" >
-				<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a class="page-link" th:href="@{/users/page/1}">First</a></li>
-					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}}" >Previous</a></li>
-					<li th:class="${currentPage!=i ? 'page-item': 'page-item active'}" th:each="i:${#numbers.sequence(1,totalPage)}"><a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a></li>
-					<li th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}}">Next</a></li>
-					<li th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPage}}">Last</a></li>
+				<ul class="pagination justify-content-center">
+					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a class="page-link"
+							th:href="@{'/users/page/1?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First</a></li>
+					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a class="page-link"
+							th:href="@{'/users/page/' + ${currentPage-1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Previous</a>
+					</li>
+					<li th:class="${currentPage!=i ? 'page-item': 'page-item active'}"
+						th:each="i:${#numbers.sequence(1,totalPage)}"><a class="page-link"
+							th:href="@{'/users/page/' + ${i}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">[[${i}]]</a>
+					</li>
+					<li th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a class="page-link"
+							th:href="@{'/users/page/' + ${currentPage+1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Next</a>
+					</li>
+					<li th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a class="page-link"
+							th:href="@{'/users/page/' + ${totalPage}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Last</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -217,6 +226,11 @@
 				$("#yesButton").attr("href", link.attr("href"))
 			})
 		})
+		
+		function clearFeature()
+		{
+			window.location="[[@{/users}]]"
+		}
 	</script>
 </body>
 

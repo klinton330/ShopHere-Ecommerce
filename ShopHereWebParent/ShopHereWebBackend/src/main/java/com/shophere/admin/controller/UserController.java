@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -16,10 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.shophere.admin.service.UserService;
 import com.shophere.admin.utils.FileUploadUtil;
+import com.shophere.admin.utils.UserCSVExporter;
+import com.shophere.admin.utils.UserExcelExporter;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
@@ -29,7 +33,7 @@ public class UserController {
 
 	@GetMapping("users")
 	public String displayFirstPage(Model model) {
-		return listByPage(1, model,"firstName","asc",null);
+		return listByPage(1, model, "firstName", "asc", null);
 	}
 
 	@GetMapping("/users/new")
@@ -69,7 +73,8 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("message", "The user has been saved Successfully");
 		else
 			redirectAttributes.addFlashAttribute("message", "The user has been Updated Successfully");
-		return "redirect:/users";
+		String firstPartOfEmail = userObj.getEmail().split("@")[0];
+		return "redirect:/users/page/1?sortField=firstName&sortDir=asc&keyword=" + firstPartOfEmail;
 	}
 
 	@GetMapping("users/edit/{id}")
@@ -108,37 +113,49 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/users";
 	}
-   
-	//http://localhost:8085/ShopHereAdmin/users/page/1?sortField=email&sortDir=asc
+
+	// http://localhost:8085/ShopHereAdmin/users/page/1?sortField=email&sortDir=asc
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable(name="pageNum")int pageNum,Model model,@Param("sortField")
-	String sortField,@Param("sortOrder") String sortDir,@Param("keyword")String keyword)
-	{
-		  System.out.println("SortField:"+sortField);
-		  System.out.println("SortOrder:"+sortDir);
-		Page<User> page=userService.listByPage(pageNum,sortField,sortDir,keyword);
-	  
-		List<User>listUsers=page.getContent();
-		long startCount=(pageNum-1)*userService.USER_PER_PAGE+1; //0,5
-		long endCount=startCount+ userService.USER_PER_PAGE-1;//4,9no
-		if(endCount> page.getTotalElements())
-		{
-			endCount=page.getTotalElements();
+	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
+			@Param("sortField") String sortField, @Param("sortOrder") String sortDir,
+			@Param("keyword") String keyword) {
+		System.out.println("SortField:" + sortField);
+		System.out.println("SortOrder:" + sortDir);
+		Page<User> page = userService.listByPage(pageNum, sortField, sortDir, keyword);
+
+		List<User> listUsers = page.getContent();
+		long startCount = (pageNum - 1) * userService.USER_PER_PAGE + 1; // 0,5
+		long endCount = startCount + userService.USER_PER_PAGE - 1;// 4,9no
+		if (endCount > page.getTotalElements()) {
+			endCount = page.getTotalElements();
 		}
-		String reverseSortDir=sortDir.equalsIgnoreCase("asc")?"desc":"asc";
+		String reverseSortDir = sortDir.equalsIgnoreCase("asc") ? "desc" : "asc";
 		model.addAttribute("totalPage", page.getTotalPages());
 		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("startCount", startCount);
-		model.addAttribute("endCount",endCount);
+		model.addAttribute("endCount", endCount);
 		model.addAttribute("listusers", listUsers);
-		model.addAttribute("totalItems",page.getTotalElements());
+		model.addAttribute("totalItems", page.getTotalElements());
 		model.addAttribute("SortField", sortField);
 		model.addAttribute("SortDir", sortDir);
 		model.addAttribute("SortField", sortField);
-		model.addAttribute("reverseSortDir",  reverseSortDir);
-		model.addAttribute("keyword",  keyword);
+		model.addAttribute("reverseSortDir", reverseSortDir);
+		model.addAttribute("keyword", keyword);
 		return "user";
-		
-		
+
+	}
+
+	@GetMapping("/users/export/csv")
+	public void exportToCSV(HttpServletResponse httpServletResponse) throws IOException {
+		UserCSVExporter userCsvExporter = new UserCSVExporter();
+		List<User> lisUsers = userService.listAll();
+		userCsvExporter.export(lisUsers, httpServletResponse);
+	}
+	
+	@GetMapping("/users/export/excel")
+	public void exportToExcel(HttpServletResponse httpServletResponse) throws IOException {
+		UserExcelExporter userExcelExporter = new UserExcelExporter();
+		List<User> lisUsers = userService.listAll();
+		 userExcelExporter.export(lisUsers, httpServletResponse);
 	}
 }

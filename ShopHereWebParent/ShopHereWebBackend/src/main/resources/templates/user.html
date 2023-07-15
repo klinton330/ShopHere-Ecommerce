@@ -100,7 +100,10 @@
 	</nav>
 	<div class="pl-5">
 		<h2 class="text-center">Manage User</h2>
-		<a th:href="@{/users/new}">New Users</a>
+		<a th:href="@{/users/new}">New Users</a> &nbsp;|&nbsp;
+		<a th:href="@{/users/export/csv}">Export to CSV</a> &nbsp;|&nbsp;
+		<a th:href="@{/users/export/excel}">Export to Excel</a>&nbsp;|&nbsp;
+		<a th:href="@{/users/export/excel}">Export to PDF</a>
 	</div>
 
 	<div  class="pl-5 mt-2">
@@ -121,15 +124,7 @@
 				<tr>
 					<th>User ID</th>
 					<th>Email</th>
-					<th><a th:if="${SortField!='firstName'}" class="text-white"
-							th:href="@{'/users/page/'+${currentPage}+'?sortField=firstName&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First
-							Name</a>
-						<a th:if="${SortField=='firstName'}" class="text-white"
-							th:href="@{'/users/page/'+${currentPage}+'?sortField=firstName&sortDir='+${reverseSortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First
-							Name</a>
-						<span th:if="${SortField=='firstName'}"
-							th:class="${SortDir=='asc'?'fas fa-sort-up':'fas fa-sort-down'}"></span>
-					</th>
+					<th th:replace="fragments/user_list_fragment::column_link('firstName','First Name')"/>
 					<th>Last Name</th>
 					<th>Roles</th>
 					<th>Photos</th>

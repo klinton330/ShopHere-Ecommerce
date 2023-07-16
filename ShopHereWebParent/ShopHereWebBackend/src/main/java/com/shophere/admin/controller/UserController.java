@@ -20,6 +20,7 @@ import com.shophere.admin.service.UserService;
 import com.shophere.admin.utils.FileUploadUtil;
 import com.shophere.admin.utils.UserCSVExporter;
 import com.shophere.admin.utils.UserExcelExporter;
+import com.shophere.admin.utils.UserPDFExporter;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
@@ -158,4 +159,12 @@ public class UserController {
 		List<User> lisUsers = userService.listAll();
 		 userExcelExporter.export(lisUsers, httpServletResponse);
 	}
+	
+	@GetMapping("/users/export/pdf")
+	public void exportToPDF(HttpServletResponse httpServletResponse) throws IOException {
+		List<User> lisUsers = userService.listAll();
+		UserPDFExporter pdfExporter=new UserPDFExporter();
+		pdfExporter.export(lisUsers, httpServletResponse);
+	}
+	
 }

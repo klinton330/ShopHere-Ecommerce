@@ -14,6 +14,10 @@ import com.shopme.common.entity.User;
 
 public class ShopHereUserDetails implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private User user;
 
 	public ShopHereUserDetails(User user) {
@@ -58,6 +62,12 @@ public class ShopHereUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return user.isEnabled();
+	}
+	
+	public String getFullname()
+	{
+		System.out.println("Full Name:"+ this.user.getFirstName()+" "+this.user.getLastname());
+		return this.user.getFirstName()+" "+this.user.getLastname();
 	}
 
 }

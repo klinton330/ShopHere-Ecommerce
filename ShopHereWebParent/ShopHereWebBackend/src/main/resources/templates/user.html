@@ -1,18 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
 
-<head>
-	<!-- <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0">
-	<title>Home-ShopHere Admin</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
-
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-	<link rel="stylesheet" type="text/css" th:href="@{/src/main/resources/static/css/index.css}" />
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-</head>
+<head th:replace="fragments/page_header::page_head('Users-ShopHere Admin')"></head>
 <style>
 	* {
 		margin: 0;
@@ -66,38 +55,7 @@
 </style>
 
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark stroke" id="navbar">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#"><b>Shop</b>-Here</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-auto">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/users}">Users</a>
-					</li>
-
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Catagories</a>
-					</li>
-
-
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Brands</a></li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Products</a></li>
-
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Customers</a>
-					</li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Shipping</a></li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Reports</a></li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Menus</a></li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Setting</a></li>
-				</ul>
-				<button class="btn btn-primary">Sign In</button>
-
-			</div>
-		</div>
-	</nav>
+	<div  th:replace="fragments/navbar::menu"></div>
 	<div class="pl-5">
 		<h2 class="text-center">Manage User</h2>
 		<a th:href="@{/users/new}">New Users</a> &nbsp;|&nbsp;
@@ -206,10 +164,8 @@
 		</div>
 
 	</div>
+<div th:replace="fragments/footer::footer_page"></div>
 
-	<div class="text-center">
-		<p>ShopHere Control Panel-Copyright &copy; ShopHere</p>
-	</div>
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$(".link-delete").on("click", function (e) {

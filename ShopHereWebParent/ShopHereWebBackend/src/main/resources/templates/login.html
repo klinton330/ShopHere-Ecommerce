@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org"> 
+<html xmlns:th="https://thymeleaf.org" xmlns:sec="https://thymeleaf.org/thymeleaf-extras-springsecurity5"> 
 <head>
 <!-- <meta http-equiv="Content-Type" content="text/html" charset=UTF-8">-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0 ,minimum-scale=1.0">
@@ -20,6 +20,10 @@
            <div th:if="${param.error}">
                 <p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
            </div>
+           
+            <div th:if="${param.logout}">
+                <p class="text-warning">you have been Logged Out.</p>
+           </div>
             <div class="border border-secondary rounded p-3">
                <p>Access to Shop-Here Control Panel</p>
                 
@@ -35,9 +39,8 @@
             </div>
     </form>
     
-    <div>
-      <p>Shop Control Panel-Copyright &copy; Shop-Here</p>
+   
     </div>
-    </div>
+    <div th:replace="fragments/footer::footer_page"></div>
 </body>
 </html>

@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
 
 @Configuration
 @EnableWebSecurity
@@ -35,19 +39,20 @@ public class SecurityConfiguration {
 		return new BCryptPasswordEncoder();
 	}
 
-	 @Bean
-	    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-	        AuthenticationManagerBuilder authenticationManagerBuilder =
-	                http.getSharedObject(AuthenticationManagerBuilder.class);
-	        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+	@Bean
+	public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authenticationManagerBuilder = http
+				.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+		return authenticationManagerBuilder.build();
+	}
 
-	        return authenticationManagerBuilder.build();
-	    }
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
-				.formLogin(form -> form.loginPage("/login").usernameParameter("email").permitAll()).logout((logout) -> logout
-				        .permitAll());
+				.formLogin(form -> form.loginPage("/login").usernameParameter("email").permitAll())
+				.logout((logout) -> logout.permitAll())
+				.rememberMe((remember) -> remember.key("shophere").rememberMeParameter("remember-me").rememberMeCookieName("remember-me-cookie").tokenValiditySeconds(7*24*60*60));
 
 		return httpSecurity.build();
 	}

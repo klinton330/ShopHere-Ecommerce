@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+
+<!-- <th th:replace="fragments/user_list_fragment::column_link('firstName','First Name')"/> -->
+<head
+	th:replace="fragments/page_header::page_head('Your Account Details')"></head>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
+}
+
+#navbar {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	padding: .5rem 5rem;
+	background: #189bf3;
+}
+
+.navbar .navbar-brand {
+	font-size: 25px;
+	font-weight: 600;
+	color: #fff;
+	letter-spacing: 4px;
+}
+
+#navbarSupportedContent a {
+	color: #fff;
+	border-bottom: 2px solid transparent;
+}
+
+#navbarSupportedContent a:hover {
+	border-bottom: 2px solid #7e1d53;
+	;
+}
+
+#navbarSupportedContent button {
+	background-color: #ffffff;
+	width: 5rem;
+	border-radius: 15px;
+	color: black;
+	border: none;
+}
+
+#navbarSupportedContent button:hover {
+	background-color: #7e1d53;
+	color: white;
+}
+
+.table-content {
+	margin: 50px;
+}
+</style>
+
+<body>
+	<div th:replace="fragments/navbar::menu"></div>
+	<div>
+		<h2 class="text-center pt-1">Your Account Details</h2>
+		
+	</div>
+	
+	<div class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalTitle">Warning</h4>
+					<button type="button" class="close" data-dismiss="modal">&times</button>
+				</div>
+
+				<div class="modal-body">
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form th:action="@{/account/update}" method="post"
+		style="max-width: 700px; margin: 0 auto" th:object="${user}"
+		autocomplete="off" enctype="multipart/form-data">
+		<div th:if="${message!=null}" class="alert alert-success text-center" >
+		[[${message}]]</div>
+		
+		<input type="hidden" th:field="*{id}" id="userId" />
+		<div class="border border-secondary rounded p-3">
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">E-mail</label>
+				<div class="col-sm-8">
+					<input type="email" class="form-control" th:field="*{email}"
+						readonly="readonly" id="email" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">First Name</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{firstName}"
+						required minlength="2" maxlength="128" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Last Name</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{lastname}"
+						required minlength="2" maxlength="128" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Password</label>
+				<div class="col-sm-8">
+					<input type="password" th:field="*{password}" class="form-control"
+						minlength="8" maxlength="20"
+						placeholder="Leave Blank if you dont want to Change Password"
+						oninput="checkpasswordMatch(document.getElementById('confirmPassword'))">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Confirm Password</label>
+				<div class="col-sm-8">
+					<input type="password" id="confirmPassword" class="form-control"
+						oninput="checkpasswordMatch(this)">
+				</div>
+			</div>
+
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Assigned Roles</label>
+				<div class="col-sm-8">
+					<span><b>[[${user.roles}]]</b></span>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Photos</label>
+				<div class="col-sm-8">
+					<input type="hidden" th:field="*{photos}"> <input
+						type="file" id="fileImage" name="image"
+						accept="image/png, image/jpeg" /> <img id="thumbnail"
+						th:src="@{${user.photoImagePath}}"
+						style="height: 80px; width: 80px" />
+				</div>
+			</div>
+
+
+
+			<div class="text-center">
+				<input type="submit" value="Save" class="btn btn-primary m-3">'
+				<input type="button" value="Cancel" class="btn btn-secondary"
+					id="buttonCancel">
+			</div>
+		</div>
+
+	</form>
+
+	<div th:replace="fragments/footer::footer_page"></div>
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#buttonCancel").on("click", function () {
+			window.location = "[[@{/users}]]"
+		})
+		
+		$("#fileImage").change(function(){
+	        var fileSize=this.files[0].size;
+	        if(fileSize>1048576)
+	        {
+	         this.setCustomValidity("you must choose an image less than 1MB")
+	         this.reportValidity();
+	        }
+	        else
+	        {
+	        this.setCustomValidity("")
+	        showImageThumbnail(this)
+	        }
+		})
+	})
+	
+	function  showImageThumbnail(fileInput)
+	{
+	   console.log("FileInput->this",fileInput);
+	   var file=fileInput.files[0];
+	   console.log("fileVariable",file);
+	   var reader=new FileReader();
+	   reader.onload= function(e){
+	      console.log("e",e);
+	      console.log("Result",e.target.result);
+	      $("#thumbnail").attr("src",e.target.result);
+	   }
+	   reader.readAsDataURL(file);
+	}
+
+    function checkpasswordMatch(confirmPassword)
+    {
+    if(confirmPassword.value!=$("#password").val())
+    {
+      confirmPassword.setCustomValidity('Passwords do not Match!');
+    }
+    else
+    {
+     confirmPassword.setCustomValidity('');
+    }
+    }
+	
+</script>
+
+</html>

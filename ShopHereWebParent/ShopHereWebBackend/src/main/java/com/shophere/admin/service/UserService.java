@@ -34,6 +34,11 @@ public class UserService {
 		return (List<User>) userRepository.findAll();
 	}
 
+	public User getByEmail(String email) {
+		User user = userRepository.getUserByEmail(email);
+		return user;
+	}
+
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
@@ -104,6 +109,20 @@ public class UserService {
 			throw new UsernameNotFoundException("Could not find the User with Id:" + id);
 		else
 			userRepository.deleteById(id);
+	}
+
+	public User updateAccount(User userInAccountForm) {
+		User userFromDB = userRepository.findById(userInAccountForm.getId()).get();
+		if (!userInAccountForm.getPassword().isEmpty()) {
+			userFromDB.setPassword(userInAccountForm.getPassword());
+			encodePassword(userFromDB);
+		}
+		if (userInAccountForm.getPhotos() != null) {
+			userFromDB.setPhotos(userInAccountForm.getPhotos());
+		}
+		userFromDB.setFirstName(userInAccountForm.getFirstName());
+		userFromDB.setLastname(userInAccountForm.getLastname());
+		return userRepository.save(userFromDB);
 	}
 
 	public void updateUserEnabledService(Integer id, boolean enabled) {

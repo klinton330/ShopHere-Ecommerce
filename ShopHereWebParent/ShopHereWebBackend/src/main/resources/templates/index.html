@@ -50,6 +50,18 @@
 </style>
 <body>
 
-<div  th:replace="fragments/navbar::menu"></div>
-<div th:replace="fragments/footer::footer_page"></div>
+	<div th:replace="fragments/navbar::menu"></div>
+	<div class="container-fluid p-4"
+		style="display: flex; align-items: flex-end; justify-content: space-between;">
+		<h1>ShopHere Control Panel</h1>
+		<div>
+			<h3>
+				Welcome
+				 <a th:href="@{/account}"
+					sec:authentication="principal.fullname"></a>
+			</h3>
+			<span sec:authentication="principal.authorities"></span>
+		</div>
+	</div>
+	<div th:replace="fragments/footer::footer_page"></div>
 </html>

@@ -12,7 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.RememberMeServices;import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
@@ -49,10 +50,13 @@ public class SecurityConfiguration {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
+		httpSecurity
+				.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/users/**").hasAuthority("Admin")
+						.anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").usernameParameter("email").permitAll())
 				.logout((logout) -> logout.permitAll())
-				.rememberMe((remember) -> remember.key("shophere").rememberMeParameter("remember-me").rememberMeCookieName("remember-me-cookie").tokenValiditySeconds(7*24*60*60));
+				.rememberMe((remember) -> remember.key("shophere").rememberMeParameter("remember-me")
+						.rememberMeCookieName("remember-me-cookie").tokenValiditySeconds(7 * 24 * 60 * 60));
 
 		return httpSecurity.build();
 	}

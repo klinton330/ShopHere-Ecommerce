@@ -33,3 +33,10 @@ Adding dependency
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
+
+
+klintonece@gmail.com   Admin
+vijayshanker@gmail.com vijayshanker Shipper
+anithavijay@gmail.com anithavijay Editor
+rahulkumar@gmail.com rahulkumar   Assistent
+sekarraju@gmail.com   sekarraju   salesparson

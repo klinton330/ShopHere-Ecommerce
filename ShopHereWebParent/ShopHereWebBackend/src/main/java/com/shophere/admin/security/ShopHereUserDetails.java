@@ -69,5 +69,14 @@ public class ShopHereUserDetails implements UserDetails {
 		System.out.println("Full Name:"+ this.user.getFirstName()+" "+this.user.getLastname());
 		return this.user.getFirstName()+" "+this.user.getLastname();
 	}
+	
+	public void setFirstName(String firstName)
+	{
+		this.user.setFirstName(firstName);
+	}
+	public void setLastName(String lastName)
+	{
+		this.user.setLastname(lastName);
+	}
 
 }

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.shophere.admin.export.UserCSVExporter;
+import com.shophere.admin.export.UserExcelExporter;
+import com.shophere.admin.export.UserPDFExporter;
 import com.shophere.admin.service.UserService;
 import com.shophere.admin.utils.FileUploadUtil;
-import com.shophere.admin.utils.UserCSVExporter;
-import com.shophere.admin.utils.UserExcelExporter;
-import com.shophere.admin.utils.UserPDFExporter;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
@@ -44,7 +44,7 @@ public class UserController {
 		model.addAttribute("user", userObj);
 		model.addAttribute("listRoles", listRoles);
 		model.addAttribute("pageTitle", "Create New User");
-		return "user-form";
+		return "users/user-form";
 	}
 
 	@PostMapping("/users/save")
@@ -86,7 +86,7 @@ public class UserController {
 			model.addAttribute("pageTitle", "Edit User:" + id);
 			List<Role> listRoles = userService.listRoles();
 			model.addAttribute("listRoles", listRoles);
-			return "user-form";
+			return "users/user-form";
 		} catch (UsernameNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 			return "redirect:/users";
@@ -142,7 +142,7 @@ public class UserController {
 		model.addAttribute("SortField", sortField);
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		model.addAttribute("keyword", keyword);
-		return "user";
+		return "users/user";
 
 	}
 

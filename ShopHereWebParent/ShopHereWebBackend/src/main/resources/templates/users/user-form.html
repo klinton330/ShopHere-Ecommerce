@@ -2,8 +2,7 @@
 <html xmlns:th="https://thymeleaf.org">
 
 <!-- <th th:replace="fragments/user_list_fragment::column_link('firstName','First Name')"/> -->
-<head
-	th:replace="fragments/page_header::page_head('Your Account Details')"></head>
+<head th:replace="fragments/page_header::page_head('UserForm-ShopHere Admin')"></head>
 <style>
 * {
 	margin: 0;
@@ -57,12 +56,12 @@
 </style>
 
 <body>
-	<div th:replace="fragments/navbar::menu"></div>
+	<div  th:replace="fragments/navbar::menu"></div>
 	<div>
-		<h2 class="text-center pt-1">Your Account Details</h2>
-		
+		<h2 class="text-center pt-1">Manage User|[[${pageTitle}]]</h2>
 	</div>
-	
+
+     
 	<div class="modal fade text-center" id="modalDialog">
 		<div class="modal-dialog">
 
@@ -82,19 +81,17 @@
 		</div>
 	</div>
 
-	<form th:action="@{/account/update}" method="post"
+	<form th:action="@{/users/save}" method="post"
 		style="max-width: 700px; margin: 0 auto" th:object="${user}"
-		autocomplete="off" enctype="multipart/form-data">
-		<div th:if="${message!=null}" class="alert alert-success text-center" >
-		[[${message}]]</div>
-		
+		autocomplete="off" onsubmit="return checkUniqueEmail(this)"
+		 enctype="multipart/form-data">
 		<input type="hidden" th:field="*{id}" id="userId" />
 		<div class="border border-secondary rounded p-3">
 			<div class="form-group row">
 				<label class="col-sm-4 col-form-label">E-mail</label>
 				<div class="col-sm-8">
 					<input type="email" class="form-control" th:field="*{email}"
-						readonly="readonly" id="email" />
+						id="email" required minlength="8" maxlength="128" />
 				</div>
 			</div>
 
@@ -117,35 +114,41 @@
 			<div class="form-group row">
 				<label class="col-sm-4 col-form-label">Password</label>
 				<div class="col-sm-8">
-					<input type="password" th:field="*{password}" class="form-control"
-						minlength="8" maxlength="20"
-						placeholder="Leave Blank if you dont want to Change Password"
-						oninput="checkpasswordMatch(document.getElementById('confirmPassword'))">
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-4 col-form-label">Confirm Password</label>
-				<div class="col-sm-8">
-					<input type="password" id="confirmPassword" class="form-control"
-						oninput="checkpasswordMatch(this)">
+					<input th:if="${user.id==null}" type="password"
+						class="form-control" th:field="*{password}" required minlength="8"
+						maxlength="20" /> <input th:if="${user.id!=null}" type="password"
+						class="form-control" th:field="*{password}" minlength="8"
+						maxlength="20" />
 				</div>
 			</div>
 
 
 			<div class="form-group row">
-				<label class="col-sm-4 col-form-label">Assigned Roles</label>
+				<label class="col-sm-4 col-form-label">Roles</label>
 				<div class="col-sm-8">
-					<span><b>[[${user.roles}]]</b></span>
+					<th:block th:each="role:${listRoles}">
+						<input type="checkbox" th:field="*{roles}" th:text="${role.name}"
+							th:value="${role.id}" class="m-2" />-
+						<small>[[${role.description}]]</small>
+						<br />
+					</th:block>
+				</div>
+			</div>
+
+
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label">Enabled</label>
+				<div class="col-sm-8">
+					<input type="checkbox" th:field="*{enabled}" />
 				</div>
 			</div>
 
 			<div class="form-group row">
 				<label class="col-sm-4 col-form-label">Photos</label>
 				<div class="col-sm-8">
-					<input type="hidden" th:field="*{photos}"> <input
-						type="file" id="fileImage" name="image"
-						accept="image/png, image/jpeg" /> <img id="thumbnail"
-						th:src="@{${user.photoImagePath}}"
+				    <input type="hidden" th:field="*{photos}">
+					<input type="file" id="fileImage" name="image" accept="image/png, image/jpeg" />
+					<img id="thumbnail" th:src="@{${user.photoImagePath}}" 
 						style="height: 80px; width: 80px" />
 				</div>
 			</div>
@@ -165,52 +168,35 @@
 </body>
 
 <script type="text/javascript">
-	$(document).ready(function () {
-		$("#buttonCancel").on("click", function () {
-			window.location = "[[@{/users}]]"
-		})
-		
-		$("#fileImage").change(function(){
-	        var fileSize=this.files[0].size;
-	        if(fileSize>1048576)
-	        {
-	         this.setCustomValidity("you must choose an image less than 1MB")
-	         this.reportValidity();
-	        }
-	        else
-	        {
-	        this.setCustomValidity("")
-	        showImageThumbnail(this)
-	        }
-		})
-	})
-	
-	function  showImageThumbnail(fileInput)
-	{
-	   console.log("FileInput->this",fileInput);
-	   var file=fileInput.files[0];
-	   console.log("fileVariable",file);
-	   var reader=new FileReader();
-	   reader.onload= function(e){
-	      console.log("e",e);
-	      console.log("Result",e.target.result);
-	      $("#thumbnail").attr("src",e.target.result);
-	   }
-	   reader.readAsDataURL(file);
+	moduleURL="[[@{/users}]]";
+	function checkUniqueEmail(form) {
+		var url = "[[@{/users/checkemail}]]";
+		var userId = $("#userId").val();
+		var userEmail = $("#email").val();
+		var csrf = $("input[name='_csrf']").val();
+		var params = {id:userId,email: userEmail, _csrf: csrf};
+		$.post( url, params, function (response) {
+			if (response == "OK") {
+				form.submit();
+			}
+			else if (response = "DUPLICATED") {
+				showDialogModule("Warning", "This email is already taken " + userEmail);
+			}
+			else {
+				showDialogModule("Error", "Unknown Response from Server");
+			}
+
+		}).fail(function () {
+			showDialogModule("Error", "Could not connect to server");
+		});
+		return false
 	}
 
-    function checkpasswordMatch(confirmPassword)
-    {
-    if(confirmPassword.value!=$("#password").val())
-    {
-      confirmPassword.setCustomValidity('Passwords do not Match!');
-    }
-    else
-    {
-     confirmPassword.setCustomValidity('');
-    }
-    }
-	
+	function showDialogModule(title, message) {
+		$("#modal-title").text(title);
+		$("#modalBody").text(message);
+		$('#modalDialog').modal();
+	}
 </script>
-
+<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 </html>

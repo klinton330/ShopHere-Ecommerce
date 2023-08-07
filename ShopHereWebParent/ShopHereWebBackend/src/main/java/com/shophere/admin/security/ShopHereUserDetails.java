@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.shophere.admin.utils.CurrentDate;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 
@@ -77,6 +78,11 @@ public class ShopHereUserDetails implements UserDetails {
 	public void setLastName(String lastName)
 	{
 		this.user.setLastname(lastName);
+	}
+	
+	public String getCurrentDate()
+	{
+		return CurrentDate.getCurrentDate();
 	}
 
 }

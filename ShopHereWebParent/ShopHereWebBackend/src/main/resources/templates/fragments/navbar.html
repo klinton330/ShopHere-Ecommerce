@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
-
 <body>
 	<div th:fragment="menu">
 		<form th:action="@{/logout}" method="post" th:hidden="true"
@@ -24,12 +23,11 @@
 							<li class="nav-item"><a class="nav-link active"
 								aria-current="page" th:href="@{/}">Catagories</a></li>
 						</th:block>
-						<th:block
-							sec:authorize="hasAnyAuthority('Admin','Editor')">
+						<th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
 							<li class="nav-item"><a class="nav-link active"
 								aria-current="page" th:href="@{/}">Brands</a></li>
 						</th:block>
-					<th:block
+						<th:block
 							sec:authorize="hasAnyAuthority('Admin','Editor','Salesperson','Shipper')">
 							<li class="nav-item"><a class="nav-link active"
 								aria-current="page" th:href="@{/}">Products</a></li>

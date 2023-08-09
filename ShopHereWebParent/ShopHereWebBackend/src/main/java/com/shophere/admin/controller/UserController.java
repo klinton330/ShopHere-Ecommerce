@@ -3,6 +3,8 @@ package com.shophere.admin.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +31,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class UserController {
 
+	private static final Logger LOGGER=LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private UserService userService;
 
@@ -39,6 +42,7 @@ public class UserController {
 
 	@GetMapping("/users/new")
 	private String newUserForm(Model model) {
+		LOGGER.info("Create New User page called");
 		List<Role> listRoles = userService.listRoles();
 		User userObj = new User();
 		model.addAttribute("user", userObj);
@@ -152,19 +156,19 @@ public class UserController {
 		List<User> lisUsers = userService.listAll();
 		userCsvExporter.export(lisUsers, httpServletResponse);
 	}
-	
+
 	@GetMapping("/users/export/excel")
 	public void exportToExcel(HttpServletResponse httpServletResponse) throws IOException {
 		UserExcelExporter userExcelExporter = new UserExcelExporter();
 		List<User> lisUsers = userService.listAll();
-		 userExcelExporter.export(lisUsers, httpServletResponse);
+		userExcelExporter.export(lisUsers, httpServletResponse);
 	}
-	
+
 	@GetMapping("/users/export/pdf")
 	public void exportToPDF(HttpServletResponse httpServletResponse) throws IOException {
 		List<User> lisUsers = userService.listAll();
-		UserPDFExporter pdfExporter=new UserPDFExporter();
+		UserPDFExporter pdfExporter = new UserPDFExporter();
 		pdfExporter.export(lisUsers, httpServletResponse);
 	}
-	
+
 }

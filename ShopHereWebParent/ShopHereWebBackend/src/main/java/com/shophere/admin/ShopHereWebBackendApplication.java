@@ -13,9 +13,7 @@ import com.shophere.admin.utils.CurrentDate;
 public class ShopHereWebBackendApplication {
 
 	public static void main(String[] args) {
-
-		
-		SpringApplication.run(ShopHereWebBackendApplication.class, args);
+SpringApplication.run(ShopHereWebBackendApplication.class, args);
 	}
 
 }

@@ -1,0 +1,11 @@
+create table catagories 
+(id integer not null auto_increment, 
+alias varchar(64) not null, 
+enabled bit not null, 
+image varchar(128) not null, 
+name varchar(128) not null, 
+parent_id integer, primary key (id)) engine=InnoDB
+
+
+Create a root
+insert into catagories (alias,enabled,image,name,parent_id) values (?,?,?,?,?)

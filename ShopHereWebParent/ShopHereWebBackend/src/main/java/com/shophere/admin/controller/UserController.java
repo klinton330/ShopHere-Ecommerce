@@ -54,8 +54,9 @@ public class UserController {
 	@PostMapping("/users/save")
 	public String saveUser(User userObj, RedirectAttributes redirectAttributes,
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
-
-		if (!multipartFile.isEmpty()) {
+		LOGGER.info("Roles Assigned to User:" +userObj.getRoles());
+       
+       if (!multipartFile.isEmpty()) {
 			// To get the File Name
 			String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			userObj.setPhotos(fileName);

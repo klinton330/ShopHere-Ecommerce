@@ -19,10 +19,12 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-auto">
 						<li class="nav-item" sec:authorize="hasAuthority('Admin')"><a
 							class="nav-link active" aria-current="page" th:href="@{/users}">Users</a></li>
+						
 						<th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
 							<li class="nav-item"><a class="nav-link active"
-								aria-current="page" th:href="@{/}">Catagories</a></li>
+								aria-current="page" th:href="@{/categories}">Categories</a></li>
 						</th:block>
+						
 						<th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
 							<li class="nav-item"><a class="nav-link active"
 								aria-current="page" th:href="@{/}">Brands</a></li>

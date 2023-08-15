@@ -37,6 +37,7 @@ public class UserController {
 
 	@GetMapping("users")
 	public String displayFirstPage(Model model) {
+		LOGGER.info("/users");
 		return listByPage(1, model, "firstName", "asc", null);
 	}
 

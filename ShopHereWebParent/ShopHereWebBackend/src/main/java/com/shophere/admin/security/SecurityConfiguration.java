@@ -52,6 +52,7 @@ public class SecurityConfiguration {
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 				.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/users/**").hasAuthority("Admin")
+						.requestMatchers("/categories/**").hasAnyAuthority("Admin","Editor")
 						.anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").usernameParameter("email").permitAll())
 				.logout((logout) -> logout.permitAll())

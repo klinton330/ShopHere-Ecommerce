@@ -1,20 +1,21 @@
 package com.shophere.admin.Category;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 
 import com.shophere.admin.Repository.CatagoryRepository;
 import com.shopme.common.entity.Category;
 
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 //@Rollback(false)
 public class CatagoryRepositoryTest {
@@ -50,5 +51,50 @@ public class CatagoryRepositoryTest {
 		Category subCategory=new Category("headphone", parent);
 		Category savedCatagory=repo.save(subCategory);
 		assertThat(savedCatagory.getId()).isGreaterThan(1);
+	}
+	
+	@Test
+	public void testGetCategory()
+	{
+		Category category=repo.findById(2).get();
+		System.out.println(category.getName());
+		Set< Category> children=category.getChild();
+		for(Category subCategory:children)
+		{
+			System.out.println(subCategory.getName());
+		}
+		assertThat(children.size()).isGreaterThan(0);
+	}
+	
+	@Test
+	public void testPrintHierarchical()
+	{
+		Iterable<Category>categories=repo.findAll();
+		for(Category category:categories)
+		{
+			if(category.getParent()==null)
+			{
+				System.out.println(category.getName());
+				Set< Category> children=category.getChild();
+				for(Category subCategory:children)
+				{
+					System.out.println("-"+subCategory.getName());
+					printChildren(subCategory, 1);
+				}
+			}
+		}
+	}
+	
+	private void printChildren(Category parent, int sublevel)
+	{
+		int newLevel=sublevel+1;
+		Set<Category>children=parent.getChild();
+		for(Category subCategory:children)
+		{
+			for(int i=0;i<newLevel;i++) 
+			System.out.print("-");
+			System.out.println(subCategory.getName());
+			printChildren(subCategory, newLevel);
+		}
 	}
 }

@@ -1,10 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org"
 xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-<head th:replace="fragments/page_header::page_head('Category Admin')"></head>
+<head th:replace="fragments/page_header::page_head('Category-ShopHereAdmin')"></head>
 
 
 <body>
 <div th:replace="fragments/navbar::menu"></div>
+<div class="pt-3">
+		<h2 class="text-center">Manage Category</h2>
+		</div>
+		<div class="float-right pr-5">
+		<a   th:href="@{/}"><span class="fas fa-user-plus fa-lg-custom"></span></a> &nbsp;&nbsp;
+		<a th:href="@{/}"><span class="fas fa-file-csv fa-lg-custom"></span></a> &nbsp;
+		</div>
+	
+	
+	<div  class="pl-5 mt-2">
+		<form th:action="@{/}" class="form-inline">
+		Filter: &nbsp;
+		<input type="search" name="keyword" th:value="${keyword}"class="form-control" required /> &nbsp;&nbsp;
+		<input type="submit" value="Search" class="btn btn-primary"/> &nbsp;
+	    <input type="reset" value="Clear" class="btn btn-danger" onclick="clearFeature()"/>
+		</form>
+	</div>
+	
+	<div class="table-content">
+	   <table class="table table-bordered table-striped table-hover table-responsive-xl">
+	   <thead class="thead-dark">
+				<tr>
+				<th>ID</th>
+				<th>Category Image</th>
+				<th>Category Name</th>
+				<th>Alias</th>
+				<th>Enabled</th>
+				<th>Action</th>
+				</tr>
+				
+		</thead>
+		
+		<tbody>
+		   <tr th:each="category:${listCategories}">
+		        <td>[[${category.id}]]</td>
+		        <td>[[${category.image}]]</td>
+		         <td>[[${category.name}]]</td>
+		          <td>[[${category.alias}]]</td>
+		          <td><a th:if="${category.enabled==true}" class="fas fa-check-circle fa-lg" style="color: #70db06;"
+							th:href="@{'/'}" title="Disable user"></a> 
+						<a th:if="${category.enabled==false}" class="fas fa-check-circle fa-lg" style="color: black;"
+							th:href="@{'/'}" title="Enable user"></a></td>
+				  	
+				  	<td><a class="fas fa-user-edit fa-lg " style="color: #007bff" th:href="@{'/'}"
+							title="Edit the user"></a>
+						<span>|</span> <a class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
+							th:href="@{'/'}" title="Delete the User"></a>
+					</td>
+		   </tr>
+		
+		</tbody>
+	   
+	   </table>
+	</div>
 </body>
 </html>

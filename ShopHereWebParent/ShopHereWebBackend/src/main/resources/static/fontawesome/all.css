@@ -17,9 +17,15 @@
   line-height: 1; }
 
 .fa-lg {
-  font-size: 1.33333em;
+  font-size: 1.5em;
   line-height: 0.75em;
   vertical-align: -.0667em; }
+  
+  .fa-lg-custom {
+  font-size: 2.2em;
+  line-height: 0.75em;
+  vertical-align: -.0667em; 
+  color: #189bf3}
 
 .fa-xs {
   font-size: .75em; }

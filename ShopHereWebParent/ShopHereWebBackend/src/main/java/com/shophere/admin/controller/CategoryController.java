@@ -23,6 +23,7 @@ public class CategoryController {
 	{
 		LOGGER.info("/Categories");
 		List<Category>listOfAllCategory=categoryService.listAll();
+		model.addAttribute("listCategories",listOfAllCategory);
 		LOGGER.info("Total Length of Category:"+listOfAllCategory.size());
 		return"category/categories";
 	}

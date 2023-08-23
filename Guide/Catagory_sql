@@ -8,4 +8,4 @@ parent_id integer, primary key (id)) engine=InnoDB
 
 
 Create a root
-insert into catagories (alias,enabled,image,name,parent_id) values (?,?,?,?,?)
+insert into catagories (alias,enabled,image,name,parent_id) values (?,?,?,?,?)fggggggggg

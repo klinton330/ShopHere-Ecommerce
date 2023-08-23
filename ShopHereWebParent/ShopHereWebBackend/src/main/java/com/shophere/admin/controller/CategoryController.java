@@ -27,5 +27,18 @@ public class CategoryController {
 		LOGGER.info("Total Length of Category:"+listOfAllCategory.size());
 		return"category/categories";
 	}
+	
+	@GetMapping("/categories/new")
+	public String newCategory(Model model)
+	{
+		LOGGER.info("/categories/new");
+		List<Category>listCategories=categoryService.listCategoriesUsedInForm();
+		//listCategories.forEach(x->System.out.println(x.getName()));
+		model.addAttribute("category", new Category());
+		model.addAttribute("listCategoriesForForm", listCategories);
+		model.addAttribute("pageTitle","Create New Category");
+		return "category/category_form";
+	}
+	
 
 }

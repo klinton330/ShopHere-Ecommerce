@@ -16,5 +16,10 @@ public class CategoryService {
 	public List<Category> listAll() {
 		return catagoryRepository.findAll();
 	}
+	
+	public List<Category>listCategoriesUsedInForm()
+	{
+		return catagoryRepository.findAll();
+	}
 
 }

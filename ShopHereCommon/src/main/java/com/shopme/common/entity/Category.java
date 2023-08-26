@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "catagories")
@@ -28,11 +29,11 @@ public class Category {
 	private boolean enabled;
 
 	@OneToOne
-	@JoinColumn(name = "parent_id" )
+	@JoinColumn(name = "parent_id")
 	private Category parent;
 
 	@OneToMany(mappedBy = "parent")
-	
+
 	private Set<Category> child = new HashSet<>();
 
 	public Category(Integer id) {
@@ -40,17 +41,50 @@ public class Category {
 	}
 
 	public Category() {
-		
+
 	}
+
 	public Category(String name) {
 		this.name = name;
 		this.alias = name;
 		this.image = "default.png";
 	}
 
+	public static Category copyIdAndName(Category category) {
+		Category copyCategory = new Category();
+		copyCategory.setId(category.getId());
+		copyCategory.setName(category.getName());
+		return copyCategory;
+	}
+
+	public static Category copyIdAndName(Integer id, String name) {
+		Category copyCategory = new Category();
+		copyCategory.setId(id);
+		copyCategory.setName(name);
+		return copyCategory;
+	}
+
+	public static Category copyFullCategoryObject(Category category) {
+		Category copyCategory = new Category();
+		copyCategory.setId(category.getId());
+		copyCategory.setName(category.getName());
+		copyCategory.setImage(category.getImage());
+		copyCategory.setAlias(category.getAlias());
+		copyCategory.setEnabled(category.isEnabled());
+		return copyCategory;
+
+	}
+
+	public static Category copyFullCategoryObject(Category category, String name) {
+		Category copyCategory = Category.copyFullCategoryObject(category);
+		copyCategory.setName(name);
+		return copyCategory;
+
+	}
+
 	public Category(String name, Category parent) {
 		this(name);
-		this.parent=parent;
+		this.parent = parent;
 	}
 
 	public Integer getId() {
@@ -109,4 +143,14 @@ public class Category {
 		this.child = child;
 	}
 
+	@Transient
+	public String getImagePath()
+	{
+		System.out.println(this.image);
+		if(id==null||this.image.equalsIgnoreCase("default.png"))
+		{
+			 return  "/images/image-thumnail.png"; 
+		}
+		return "/category-images/"+this.id+"/"+this.image;
+	}
 }

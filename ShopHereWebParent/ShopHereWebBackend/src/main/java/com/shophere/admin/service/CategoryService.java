@@ -16,7 +16,45 @@ public class CategoryService {
 	private CatagoryRepository catagoryRepository;
 
 	public List<Category> listAll() {
-		return catagoryRepository.findAll();
+		List<Category> rootCategories = catagoryRepository.listRootCategories();
+		System.out.println("Size from Service:"+rootCategories.size());
+		return listHierarchicakCategories(rootCategories);
+	}
+
+	private List<Category> listHierarchicakCategories(List<Category> rootCategory) {
+		List<Category> listHierarchicakCategories = new ArrayList<>();
+		for (Category rootcategory :  rootCategory) {
+			// Object in listHierarchicakCategories list contains full details of Parent
+			listHierarchicakCategories.add(Category.copyFullCategoryObject(rootcategory));
+           System.out.println("Children Size"+rootcategory.getChild().size());
+			Set<Category> children = rootcategory.getChild();
+			for (Category subCategory : children) {
+				String name = "--" + subCategory.getName();
+				listHierarchicakCategories.add(Category.copyFullCategoryObject(subCategory, name));
+				listSubHierarchichalCategories(subCategory, listHierarchicakCategories, 1);
+			}
+		}
+		System.out.println("End of all:"+ listHierarchicakCategories.size());
+		
+		return listHierarchicakCategories;
+	}
+
+	private void listSubHierarchichalCategories(Category category, List<Category> listHierarchicakCategories,
+			int sublevel) {
+		int newLevel = sublevel + 1;
+		Set<Category> children = category.getChild();
+		for (Category subCategory : children) {
+			String name = "";
+			for (int i = 0; i < newLevel; i++)
+				name += "--";
+			name += subCategory.getName();
+			listHierarchicakCategories.add(Category.copyFullCategoryObject(category, name));
+			listSubHierarchichalCategories(subCategory, listHierarchicakCategories, newLevel);
+		}
+	}
+
+	public Category save(Category category) {
+		return catagoryRepository.save(category);
 	}
 
 	public List<Category> listCategoriesUsedInForm() {
@@ -24,10 +62,11 @@ public class CategoryService {
 		Iterable<Category> categoriesInDB = catagoryRepository.findAll();
 		for (Category category : categoriesInDB) {
 			if (category.getParent() == null) {
-				categoriesUsedInForm.add(new Category(category.getName()));
+				categoriesUsedInForm.add(Category.copyIdAndName(category));
 				Set<Category> children = category.getChild();
 				for (Category subCategory : children) {
-					categoriesUsedInForm.add(new Category("--" + subCategory.getName()));
+					String name = "--" + subCategory.getName();
+					categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 					printChildren(categoriesUsedInForm, subCategory, 1);
 				}
 			}
@@ -43,7 +82,7 @@ public class CategoryService {
 			for (int i = 0; i < newLevel; i++)
 				name += "--";
 			name += subCategory.getName();
-			categoriesUsedInForm.add(new Category(name));
+			categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 			printChildren(categoriesUsedInForm, subCategory, newLevel);
 		}
 	}

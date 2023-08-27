@@ -63,11 +63,10 @@
 						th:href="@{'/'}" title="Enable user"></a></td>
 
 					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-						th:href="@{'/categories/edit/'${category.id}}" title="Edit the user"></a> <span>|</span> <a
+						th:href="@{'/categories/edit/'+${category.id}}" title="Edit the user"></a> <span>|</span> <a
 						class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
 						th:href="@{'/'}" title="Delete the User"></a></td>
 				</tr>
-
 			</tbody>
 
 		</table>

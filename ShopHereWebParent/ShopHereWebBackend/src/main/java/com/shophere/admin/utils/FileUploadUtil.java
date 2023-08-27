@@ -44,6 +44,7 @@ public class FileUploadUtil {
 					try
 					{
 						Files.delete(file);
+						System.out.println("Deleted the file:"+file);
 					}
 					catch (IOException e) {
 						System.out.println("could not delete file:"+file);

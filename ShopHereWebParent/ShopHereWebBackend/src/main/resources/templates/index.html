@@ -3,50 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head th:replace="fragments/page_header::page_head('Home-Page')"></head>
 <style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Roboto', sans-serif;
-}
 
-#navbar {
-	position: sticky;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	padding: .5rem 5rem;
-	background: #189bf3;
-}
-
-.navbar .navbar-brand {
-	font-size: 25px;
-	font-weight: 600;
-	color: #fff;
-	letter-spacing: 4px;
-}
-
-#navbarSupportedContent a {
-	color: #fff;
-	border-bottom: 2px solid transparent;
-}
-
-#navbarSupportedContent a:hover {
-	border-bottom: 2px solid #7e1d53;;
-}
-
-#navbarSupportedContent button {
-	background-color: #ffffff;
-	width: 5rem;
-	border-radius: 15px;
-	color: black;
-	border: none;
-}
-
-#navbarSupportedContent button:hover {
-	background-color: #7e1d53;
-	color: white;
-}
 </style>
 <body>
 
@@ -56,13 +13,45 @@
 		<h1>ShopHere Control Panel</h1>
 		<div>
 			<h3>
-				Welcome
-				 <a th:href="@{/account}"
+				Welcome <a th:href="@{/account}"
 					sec:authentication="principal.fullname"></a>
 			</h3>
-			<span sec:authentication="principal.authorities"></span> &nbsp; &nbsp;
-			<span sec:authentication="principal.CurrentDate"></span>
+			<span sec:authentication="principal.authorities"></span> &nbsp;
+			&nbsp; <span sec:authentication="principal.CurrentDate"></span>
+		</div>
+
+
+	</div>
+
+	<div class="dashboard">
+		<div class="row">
+
+			<div class="col-sm-4">
+				<div class="card1">
+					<div class="card-body">
+						<h1 class="card-title">User</h1>
+						<h4 class="card-text">[[${userCount}]]</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="card2" >
+					<div class="card-body">
+						<h1 class="card-title">Category</h1>
+						<h4 class="card-text">[[${categoryCount}]]</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="card3">
+					<div class="card-body">
+						<h1 class="card-title">Brand</h1>
+						<h4 class="card-text">0</h4>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+
 	<div th:replace="fragments/footer::footer_page"></div>
 </html>

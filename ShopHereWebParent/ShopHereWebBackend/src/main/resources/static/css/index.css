@@ -3,6 +3,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
+	
 }
 
 #navbar {
@@ -46,4 +47,31 @@
 
 .table-content {
 	margin: 50px;
+}
+
+.dashboard {
+	padding: 30px;
+	margin: 10px;
+}
+
+h4{
+font-weight: 700;
+font-size: 60px;
+}
+
+.card1
+{
+background-color:#b7dbe8;
+text-align: center;
+}
+.card2
+{
+background-color: #b7e8c7;
+text-align: center;
+}
+
+.card3
+{
+background-color: #cdb7e8;
+text-align: center;
 }

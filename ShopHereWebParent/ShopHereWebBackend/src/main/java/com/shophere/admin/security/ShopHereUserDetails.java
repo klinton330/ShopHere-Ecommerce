@@ -5,10 +5,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.shophere.admin.controller.UserController;
 import com.shophere.admin.utils.CurrentDate;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
@@ -18,6 +21,7 @@ public class ShopHereUserDetails implements UserDetails {
 	/**
 	 * 
 	 */
+	private static final Logger LOGGER=LoggerFactory.getLogger(ShopHereUserDetails.class);
 	private static final long serialVersionUID = 1L;
 	private User user;
 
@@ -65,9 +69,7 @@ public class ShopHereUserDetails implements UserDetails {
 		return user.isEnabled();
 	}
 	
-	public String getFullname()
-	{
-		System.out.println("Full Name:"+ this.user.getFirstName()+" "+this.user.getLastname());
+	public String getFullname() {
 		return this.user.getFirstName()+" "+this.user.getLastname();
 	}
 	

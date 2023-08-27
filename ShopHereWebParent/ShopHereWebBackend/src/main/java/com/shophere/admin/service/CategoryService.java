@@ -19,7 +19,6 @@ public class CategoryService {
 
 	public List<Category> listAll() {
 		List<Category> rootCategories = catagoryRepository.listRootCategories();
-		System.out.println("Size from Service:"+rootCategories.size());
 		return listHierarchicakCategories(rootCategories);
 	}
 
@@ -28,7 +27,6 @@ public class CategoryService {
 		for (Category rootcategory :  rootCategory) {
 			// Object in listHierarchicakCategories list contains full details of Parent
 			listHierarchicakCategories.add(Category.copyFullCategoryObject(rootcategory));
-           System.out.println("Children Size"+rootcategory.getChild().size());
 			Set<Category> children = rootcategory.getChild();
 			for (Category subCategory : children) {
 				String name = "--" + subCategory.getName();
@@ -36,7 +34,6 @@ public class CategoryService {
 				listSubHierarchichalCategories(subCategory, listHierarchicakCategories, 1);
 			}
 		}
-		System.out.println("End of all:"+ listHierarchicakCategories.size());
 		
 		return listHierarchicakCategories;
 	}

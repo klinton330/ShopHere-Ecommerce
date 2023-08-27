@@ -63,7 +63,7 @@ public class CategoryController {
 		return "redirect:/categories";
 	}
 
-	@GetMapping("'/categories/edit/{category.id}")
+	@GetMapping("/categories/edit/{id}")
 	public String updateCategory(@PathVariable Integer id,Model model)
 	{
 		LOGGER.info("/categories/edit/"+id);

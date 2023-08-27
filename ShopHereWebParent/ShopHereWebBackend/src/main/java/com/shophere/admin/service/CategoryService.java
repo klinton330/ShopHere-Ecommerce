@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.shophere.admin.Repository.CatagoryRepository;
+import com.shophere.admin.exception.CategoryNotFoundException;
 import com.shopme.common.entity.Category;
 
 @Service
@@ -84,6 +86,17 @@ public class CategoryService {
 			name += subCategory.getName();
 			categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 			printChildren(categoriesUsedInForm, subCategory, newLevel);
+		}
+	}
+	
+	public Category findCategoryById(Integer id) throws CategoryNotFoundException
+	{
+		try
+		{
+			 return catagoryRepository.findById(id).get();        
+		}
+		catch(Exception e){
+			throw new CategoryNotFoundException("category Not Found For Id:"+id);
 		}
 	}
 }

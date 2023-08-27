@@ -10,11 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.shophere.admin.exception.CategoryNotFoundException;
 import com.shophere.admin.service.CategoryService;
 import com.shophere.admin.utils.FileUploadUtil;
 import com.shopme.common.entity.Category;
@@ -61,4 +63,18 @@ public class CategoryController {
 		return "redirect:/categories";
 	}
 
+	@GetMapping("'/categories/edit/{category.id}")
+	public String updateCategory(@PathVariable Integer id,Model model)
+	{
+		LOGGER.info("/categories/edit/"+id);
+		try {
+			Category categoryFromDB= categoryService.findCategoryById(id);
+			model.addAttribute("category", categoryFromDB);
+			
+		} catch (CategoryNotFoundException e) {
+			LOGGER.error("Exception Occured:"+e.getMessage());
+			return "redirect:/categories";
+		}
+		return "category/category_form";
+	}
 }

@@ -50,22 +50,26 @@ public class CategoryController {
 	@PostMapping("/categories/save")
 	public String saveCategory(Category category, @RequestParam("fileImage") MultipartFile multipartFile,
 			RedirectAttributes redirect) throws IOException {
+		Category savedCategory;
 		LOGGER.info("/categories/save");
 		if (!multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			LOGGER.info("After CleanPath:" + fileName);
 			category.setImage(fileName);
-			Category savedCategory = categoryService.save(category);
-			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Image:" + savedCategory.getImage()
-					+ " " + "Parent Name:" + savedCategory.getParent().getName());
-			String uploadCategoryDir = "../category-images/" + savedCategory.getId();
+			savedCategory = categoryService.save(category);
+            String uploadCategoryDir = "../category-images/" + savedCategory.getId();
 			FileUploadUtil.saveFile(uploadCategoryDir, fileName, multipartFile);
 		} else {
 			if (category.getImage().isEmpty())
 				category.setImage(null);
-			Category savedCategory = categoryService.save(category);
-			LOGGER.info("ELSE-Category Name:" + savedCategory.getName() + " " + "Category Image:" + savedCategory.getImage()
-					+ " " + "Parent Name:" + savedCategory.getParent().getName());
+			savedCategory = categoryService.save(category);
+		}
+		try {
+			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Image:"
+					+ savedCategory.getImage() + " " + "Parent Name:" + savedCategory.getParent().getName());
+		} catch (Exception ex) {
+			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Image:"
+					+ savedCategory.getImage() + " " + "Parent Name:No Parent");
 		}
 		boolean isNewCategory = false;
 		if (category.getId() == null)
@@ -86,6 +90,7 @@ public class CategoryController {
 		try {
 			Category categoryFromDB = categoryService.findCategoryById(id);
 			List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+			model.addAttribute("pageTitle", "Edit Category:" + id);
 			model.addAttribute("category", categoryFromDB);
 			model.addAttribute("listCategoriesForForm", listCategories);
 		} catch (CategoryNotFoundException e) {

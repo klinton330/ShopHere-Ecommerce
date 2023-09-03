@@ -27,9 +27,10 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+	// Get Mapping controller
 	@GetMapping("categories")
 	public String listAllCategories(Model model) {
-		LOGGER.info("/Categories");
+		LOGGER.info("GET:/Categories");
 		List<Category> listOfAllCategory = categoryService.listAll();
 		model.addAttribute("listCategories", listOfAllCategory);
 		LOGGER.info("Total Length of Category:" + listOfAllCategory.size());
@@ -51,13 +52,18 @@ public class CategoryController {
 	public String saveCategory(Category category, @RequestParam("fileImage") MultipartFile multipartFile,
 			RedirectAttributes redirect) throws IOException {
 		Category savedCategory;
+		boolean isNewCategory = false;
+
+		if (category.getId() == null) {
+			isNewCategory = true;
+		}
 		LOGGER.info("/categories/save");
 		if (!multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			LOGGER.info("After CleanPath:" + fileName);
 			category.setImage(fileName);
 			savedCategory = categoryService.save(category);
-            String uploadCategoryDir = "../category-images/" + savedCategory.getId();
+			String uploadCategoryDir = "../category-images/" + savedCategory.getId();
 			FileUploadUtil.saveFile(uploadCategoryDir, fileName, multipartFile);
 		} else {
 			if (category.getImage().isEmpty())
@@ -68,13 +74,11 @@ public class CategoryController {
 			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Image:"
 					+ savedCategory.getImage() + " " + "Parent Name:" + savedCategory.getParent().getName());
 		} catch (Exception ex) {
-			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Image:"
-					+ savedCategory.getImage() + " " + "Parent Name:No Parent");
+			LOGGER.info("IF-Category Name:" + savedCategory.getName() + " " + "Category Id:" + savedCategory.getId()
+					+ "Category Image:" + savedCategory.getImage() + " " + "Parent Name:No Parent");
 		}
-		boolean isNewCategory = false;
-		if (category.getId() == null)
-			isNewCategory = true;
 
+		LOGGER.info("Adding Type:" + isNewCategory);
 		if (isNewCategory)
 			redirect.addFlashAttribute("message", "Category has been saved Successfully");
 		else

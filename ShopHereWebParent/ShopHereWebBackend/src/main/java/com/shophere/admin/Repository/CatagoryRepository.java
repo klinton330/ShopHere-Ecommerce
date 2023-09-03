@@ -13,5 +13,9 @@ public interface CatagoryRepository extends JpaRepository<Category, Integer> {
 	
 	@Query(value = "SELECT c from Category c Where c.parent.id is NULL")
 	public List<Category> listRootCategories();
+	
+	public Category findByName(String categoryName);
+	
+	public Category findByAlias(String alias);
 
 }

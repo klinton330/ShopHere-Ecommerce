@@ -10,7 +10,7 @@
 		<h2 class="text-center pt-1">Manage Category|[[${pageTitle}]]</h2>
 	</div>
 
-
+<div  th:replace="fragments/model_dialog::modal_dialog"></div>
 
 	<form th:action="@{/categories/save}" method="post"
 		style="max-width: 500px; margin: 0 auto" th:object="${category}"
@@ -89,9 +89,17 @@
 	var csrf = $("input[name='_csrf']").val();
 	var params={id:catId,name:catName,alias:catAlias,_csrf: csrf};
 	$.post(url,params,function(response){
+	   if(response=="OK")
+	   form.submit();
+	   else if(response=="DupliacteName"){
+	   showWarningModel("There is another category having same name:"+catName)
+	   }else if(response="DupliacteAlias")
+	   showWarningModel("There is another category having same Alias:"+catAlias)
+	   else
+	   showErrorModel("Unknown Response from server")
 	   
 	}).fail(function(){
-	   
+	   showErrorModel("Could not connect to server")
 	});
 	return false;
 	}

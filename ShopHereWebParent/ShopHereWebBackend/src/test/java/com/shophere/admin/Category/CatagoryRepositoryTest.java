@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 
 import com.shophere.admin.Repository.CatagoryRepository;
 import com.shopme.common.entity.Category;
@@ -92,7 +93,7 @@ public class CatagoryRepositoryTest {
 
 	@Test
 	public void testListRootCategories() {
-		List<Category> rootCategories = repo.listRootCategories();
+		List<Category> rootCategories = repo.listRootCategories(Sort.by("name").ascending());
 		rootCategories.forEach(x -> System.out.println(x.getName()));
 	}
 

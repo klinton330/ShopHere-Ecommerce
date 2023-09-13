@@ -24,7 +24,7 @@ public class Category {
 	private String name;
 	@Column(length = 64, nullable = false, unique = true)
 	private String alias;
-	@Column(length = 128, nullable = false)
+	@Column(length = 128, nullable = true)
 	private String image;
 	private boolean enabled;
 
@@ -153,7 +153,6 @@ public class Category {
 	@Transient
 	public String getImagePath()
 	{
-		System.out.println(this.image);
 		if(id==null||this.image.equalsIgnoreCase("default.png"))
 		{
 			 return  "/images/image-thumnail.png"; 

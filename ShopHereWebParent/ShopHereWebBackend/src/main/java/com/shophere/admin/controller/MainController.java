@@ -20,10 +20,20 @@ public class MainController {
 	{
 		Long userCount=dashboardService.getUserCount();
 		Long categoryCount=dashboardService.getCategoryCount();
+		Integer userEnbledCount=dashboardService.getEnabledUserCount();
+		Integer userDisabledCount=dashboardService.getDisabledUserCount();
 		LOGGER.info("User Count:"+userCount);
+		LOGGER.info("Enabled:"+userEnbledCount+" "+"Disabled Count:"+userDisabledCount);
+		Integer categoryEnabledCount=dashboardService.getEnabledCategory();
+		Integer categoryDisabledCount=dashboardService.getDisabledCategory();
 		LOGGER.info("Category Count:"+categoryCount);
+		LOGGER.info("Enabled Category:"+categoryEnabledCount+" "+"Disabled Category:"+categoryDisabledCount);
+		model.addAttribute("userEnbledCount", userEnbledCount);
+		model.addAttribute("userDisabledCount",userDisabledCount);
 		model.addAttribute("userCount", userCount);
 		model.addAttribute("categoryCount", categoryCount);
+		model.addAttribute("categoryEnabledCount",categoryEnabledCount);
+		model.addAttribute("categoryDisabledCount",categoryDisabledCount);
 		return "index";
 	}
 	

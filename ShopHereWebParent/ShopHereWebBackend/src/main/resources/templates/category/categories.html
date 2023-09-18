@@ -22,8 +22,8 @@
 		<form th:action="@{/}" class="form-inline">
 			Filter: &nbsp; <input type="search" name="keyword"
 				th:value="${keyword}" class="form-control" required /> &nbsp;&nbsp;
-			<input type="submit" value="Search" class="btn btn-primary" /> &nbsp;
-			<input type="reset" value="Clear" class="btn btn-danger"
+			<input type="submit" value="Search" class="btn btn-primary" />
+			&nbsp; <input type="reset" value="Clear" class="btn btn-danger"
 				onclick="clearFeature()" />
 		</form>
 	</div>
@@ -37,7 +37,10 @@
 				<tr>
 					<th>ID</th>
 					<th>Category Image</th>
-					<th>Category Name</th>
+					<th><a class="text-white"
+						th:href="@{'/categories?sortDir='+${reverseSortDir}}">
+							Category Name</a> <span
+						th:class="${reverseSortDir=='asc'?'fas fa-sort-down':'fas fa-sort-up'}"></span></th>
 					<th>Alias</th>
 					<th>Enabled</th>
 					<th>Action</th>
@@ -57,13 +60,14 @@
 					<td>[[${category.alias}]]</td>
 					<td><a th:if="${category.enabled==true}"
 						class="fas fa-check-circle fa-lg" style="color: #70db06;"
-						th:href="@{'/'}" title="Disable user"></a> <a
+						th:href="@{'/categories/'+${category.id}+'/enabled/false'}" title="Disable user"></a> <a
 						th:if="${category.enabled==false}"
 						class="fas fa-check-circle fa-lg" style="color: black;"
-						th:href="@{'/'}" title="Enable user"></a></td>
+						th:href="@{'/categories/'+${category.id}+'/enabled/true'}" title="Enable user"></a></td>
 
 					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-						th:href="@{'/categories/edit/'+${category.id}}" title="Edit the user"></a> <span>|</span> <a
+						th:href="@{'/categories/edit/'+${category.id}}"
+						title="Edit the user"></a> <span>|</span> <a
 						class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
 						th:href="@{'/'}" title="Delete the User"></a></td>
 				</tr>

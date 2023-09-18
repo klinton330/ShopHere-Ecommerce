@@ -75,3 +75,21 @@ text-align: center;
 background-color: #cdb7e8;
 text-align: center;
 }
+
+.partition
+{
+display:flex;
+justify-content: space-around;
+
+}
+.subpatition{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.cardNumber
+{
+	margin-left: 25px;
+	padding:10px
+}

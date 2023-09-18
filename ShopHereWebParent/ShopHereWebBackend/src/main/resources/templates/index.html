@@ -28,29 +28,69 @@
 
 			<div class="col-sm-4">
 				<div class="card1">
-					<div class="card-body">
-						<h1 class="card-title">User</h1>
+					<div class="card-body partition">
+					    <div>
+						<h1 class="card-title">Users</h1>
 						<h4 class="card-text">[[${userCount}]]</h4>
+						</div>
+						
+						<div class="subpatition">
+						<div>
+						   <h3 class="card-title">Enabled:<span class="cardNumber">[[${userEnbledCount}]]</span></h3>
+						</div>
+						
+						<div>
+						   <h3 class="card-title">Disabled:<span class="cardNumber">[[${userDisabledCount}]]</span></h3>
+						</div>
+						</div>
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-sm-4">
 				<div class="card2" >
-					<div class="card-body">
-						<h1 class="card-title">Category</h1>
-						<h4 class="card-text">[[${categoryCount}]]</h4>
-					</div>
+					<div class="card-body partition">
+					    <div>
+							<h1 class="card-title">Category</h1>
+							<h4 class="card-text">[[${categoryCount}]]</h4>
+							</div>
+							
+							<div class="subpatition">
+							<div>
+							   <h3 class="card-title">Enabled:<span class="cardNumber">[[${categoryEnabledCount}]]</span></h3>
+							</div>
+							
+							<div>
+							   <h3 class="card-title">Disabled:<span class="cardNumber">[[${categoryDisabledCount}]]</span></h3>
+							</div>
+						</div>
+					
 				</div>
 			</div>
+			
+		</div>
+		
+		
 			<div class="col-sm-4">
 				<div class="card3">
-					<div class="card-body">
+					<div class="card-body partition">
+					    <div>
 						<h1 class="card-title">Brand</h1>
 						<h4 class="card-text">0</h4>
+						</div>
+						
+						<div class="subpatition">
+						<div>
+						   <h3 class="card-title">Enabled:<span class="cardNumber">0</span></h3>
+						</div>
+						
+						<div>
+						   <h3 class="card-title">Disabled:<span class="cardNumber">0</span></h3>
+						</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 	</div>
 
 	<div th:replace="fragments/footer::footer_page"></div>

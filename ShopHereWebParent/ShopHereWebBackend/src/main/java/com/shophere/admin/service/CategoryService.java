@@ -162,8 +162,16 @@ public class CategoryService {
 		sortedChildrenSet.addAll(children);
 		return sortedChildrenSet;
 	}
-	
-	public void updateCategoryEnabledStatus(Integer id,boolean enabled) {
+
+	public void updateCategoryEnabledStatus(Integer id, boolean enabled) {
 		catagoryRepository.updateEnabledStatus(id, enabled);
+	}
+
+	public void deleteCategory(Integer id) throws CategoryNotFoundException {
+		Long countById = catagoryRepository.countById(id);
+		if (countById == null || countById == 0) {
+			throw new CategoryNotFoundException("Count no find any category with Id:" + id);
+		}
+		catagoryRepository.deleteById(id);
 	}
 }

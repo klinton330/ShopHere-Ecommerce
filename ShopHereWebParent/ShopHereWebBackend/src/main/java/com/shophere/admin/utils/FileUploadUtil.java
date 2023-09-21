@@ -8,9 +8,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.hibernate.internal.build.AllowSysOut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.shophere.admin.controller.CategoryController;
+
 public class FileUploadUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
 
 	// saveFile(user-photos,Bret-Har.png,multipartFile)
 	public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
@@ -32,28 +37,36 @@ public class FileUploadUtil {
 			throw new IOException("could not save file:" + fileName + e.getMessage());
 		}
 	}
-	
-	public static void cleanDir(String dir)
-	{
-		Path dirPath=Paths.get(dir);
-		try
-		{
-			Files.list(dirPath).forEach(file->{
-				if(!Files.isDirectory(file))
-				{
-					try
-					{
+
+	public static void cleanDir(String dir) {
+		Path dirPath = Paths.get(dir);
+		try {
+			Files.list(dirPath).forEach(file -> {
+				if (!Files.isDirectory(file)) {
+					try {
 						Files.delete(file);
-						System.out.println("Deleted the file:"+file);
+						LOGGER.info("Deleted the file:"+file);
+					} catch (IOException e) {
+						LOGGER.error("could not remove directory:" + dir);
+						LOGGER.error(e.getMessage());
 					}
-					catch (IOException e) {
-						System.out.println("could not delete file:"+file);
-					}
-					};
-				});
-			}catch (IOException e) {
-				System.out.println("could not list Directory:"+dir);
-			};
+				}
+				;
+			});
+		} catch (IOException e) {
+			LOGGER.error("could not remove directory:" + dir);
+			LOGGER.error(e.getMessage());
 		}
+		;
 	}
 
+	public static void removeDir(String dir) {
+		cleanDir(dir);
+		try {
+			Files.delete(Paths.get(dir));
+		} catch (Exception e) {
+			LOGGER.error("could not remove directory:" + dir);
+			LOGGER.error(e.getMessage());
+		}
+	}
+}

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,14 +31,14 @@ public class CategoryController {
 
 	// Get Mapping controller
 	@GetMapping("categories")
-	public String listAllCategories(@Param("sortDir")String sortDir, Model model) {
-		if(sortDir==null||sortDir.isEmpty())
-			sortDir="asc";
-		LOGGER.info("GET:/Categories:Sorting Direction:"+sortDir);
+	public String listAllCategories(@Param("sortDir") String sortDir, Model model) {
+		if (sortDir == null || sortDir.isEmpty())
+			sortDir = "asc";
+		LOGGER.info("GET:/Categories:Sorting Direction:" + sortDir);
 		List<Category> listOfAllCategory = categoryService.listAll(sortDir);
-		String reverseSortDir=sortDir.equals("asc")?"desc":"asc";
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		model.addAttribute("listCategories", listOfAllCategory);
-		model.addAttribute("reverseSortDir",reverseSortDir);
+		model.addAttribute("reverseSortDir", reverseSortDir);
 		LOGGER.info("Total Length of Category:" + listOfAllCategory.size());
 		return "category/categories";
 	}
@@ -109,15 +110,33 @@ public class CategoryController {
 		}
 		return "category/category_form";
 	}
-	
+
 	@GetMapping("/categories/{id}/enabled/{status}")
-	public String updateCategoryEnabledStatus(@PathVariable ("id") Integer id,@PathVariable("status")boolean enabled,RedirectAttributes redirect) {
+	public String updateCategoryEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled,
+			RedirectAttributes redirect) {
 		categoryService.updateCategoryEnabledStatus(id, enabled);
-		LOGGER.info("/categories/"+id+"/enabled/"+enabled);
+		LOGGER.info("/categories/" + id + "/enabled/" + enabled);
 		String statusMessage = enabled ? "enabled" : "disabled";
 		String message = "The Category ID " + id + " has Been " + statusMessage;
 		LOGGER.info(message);
 		redirect.addFlashAttribute("message", message);
-		return"redirect:/categories";
+		return "redirect:/categories";
+	}
+
+	@GetMapping("/categories/delete/{id}")
+	public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+		try {
+			categoryService.deleteCategory(id);
+			String categoryDir="../category-images/"+id;
+			FileUploadUtil.removeDir(categoryDir);
+			LOGGER.info("The Category id:" + id + "+has been deleted Successfully");
+			redirectAttributes.addAttribute("message", "The Category id:" + id + "+has been deleted Successfully");
+			return "redirect:/categories";
+		} catch (CategoryNotFoundException e) {
+			LOGGER.error(e.getMessage());
+			redirectAttributes.addAttribute("message", e.getMessage());
+			return "redirect:/categories";
+		}
+
 	}
 }

@@ -67,13 +67,35 @@
 
 					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
 						th:href="@{'/categories/edit/'+${category.id}}"
-						title="Edit the user"></a> <span>|</span> <a
-						class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
-						th:href="@{'/'}" title="Delete the User"></a></td>
+						title="Edit the user"></a> 
+						&nbsp;
+						<th:block th:if="${category.hasChildren==false}">
+						<a
+						class="fas fa-trash-alt fa-lg link-delete" 
+						style="color: #f50000;"
+						th:href="@{'/categories/delete/'+${category.id}}" 
+						th:entityId="${category.id}"
+						title="Delete the User"></a></td>
+						</th:block>
 				</tr>
 			</tbody>
 
 		</table>
 	</div>
+	<div th:replace="fragments/model_fragments::confirm_modal"></div>
+	<div th:replace="fragments/footer::footer_page"></div>
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+	
+	    moduleURL="[[@{/categories}]]"
+		
+		$(document).ready(function () {
+			$(".link-delete").on("click", function (e) {
+				e.preventDefault();
+				showDeleteConfirmModel($(this),'category')
+			})
+		})
+		
+	</script>
 </body>
 </html>

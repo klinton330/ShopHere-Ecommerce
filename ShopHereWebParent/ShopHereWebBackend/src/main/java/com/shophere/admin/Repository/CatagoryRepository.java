@@ -24,6 +24,7 @@ public interface CatagoryRepository extends JpaRepository<Category, Integer> {
 	@Modifying
 	public void updateEnabledStatus(Integer id, boolean enabled);
 	
+	public Long countById(Integer id);
 	
 
 }

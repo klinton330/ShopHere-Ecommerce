@@ -82,6 +82,7 @@
 
 		</table>
 	</div>
+	<div th:replace="fragments/pagination ::pagination('/categories','categories')"></div>
 	<div th:replace="fragments/model_fragments::confirm_modal"></div>
 	<div th:replace="fragments/footer::footer_page"></div>
 	<script th:src="@{/js/common_list.js}"></script>

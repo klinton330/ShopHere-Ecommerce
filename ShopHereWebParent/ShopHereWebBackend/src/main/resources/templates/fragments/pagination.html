@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<div th:fragment="pagination(moduleURL,entityName)">
+<div class="text-center m-1" th:if="${totalItems>0}">
+			<span>Showing [[${entityName}]] # [[${startCount}]] to [[${endCount}]] of
+				[[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems>0}">
+			<span>No UserFound</span>
+		</div>
+<div th:if="${totalItems>0}">
+			<nav>
+				<ul class="pagination justify-content-center">
+					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a
+						class="page-link"
+						th:href="@{${moduleURL}+'/page/1?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First</a></li>
+					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a
+						class="page-link"
+						th:href="@{${moduleURL}+'/page/' + ${currentPage-1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Previous</a>
+					</li>
+					<li th:class="${currentPage!=i ? 'page-item': 'page-item active'}"
+						th:each="i:${#numbers.sequence(1,totalPage)}"><a
+						class="page-link"
+						th:href="@{${moduleURL}+'/page/' + ${i}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">[[${i}]]</a>
+					</li>
+					<li
+						th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a
+						class="page-link"
+						th:href="@{${moduleURL}+'/page/' + ${currentPage+1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Next</a>
+					</li>
+					<li
+						th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a
+						class="page-link"
+						th:href="@{${moduleURL}+'/page/' + ${totalPage}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Last</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>

@@ -83,44 +83,12 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="text-center m-1" th:if="${totalItems>0}">
-			<span>Showing User # [[${startCount}]] to [[${endCount}]] of
-				[[${totalItems}]]</span>
-		</div>
-		<div class="text-center m-1" th:unless="${totalItems>0}">
-			<span>No UserFound</span>
-		</div>
-		<div th:if="${totalItems>0}">
-			<nav>
-				<ul class="pagination justify-content-center">
-					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a
-						class="page-link"
-						th:href="@{'/users/page/1?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">First</a></li>
-					<li th:class="${currentPage>1?'page-item':'page-item disabled'}"><a
-						class="page-link"
-						th:href="@{'/users/page/' + ${currentPage-1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Previous</a>
-					</li>
-					<li th:class="${currentPage!=i ? 'page-item': 'page-item active'}"
-						th:each="i:${#numbers.sequence(1,totalPage)}"><a
-						class="page-link"
-						th:href="@{'/users/page/' + ${i}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">[[${i}]]</a>
-					</li>
-					<li
-						th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a
-						class="page-link"
-						th:href="@{'/users/page/' + ${currentPage+1}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Next</a>
-					</li>
-					<li
-						th:class="${currentPage<totalPage?'page-item':'page-item disabled'}"><a
-						class="page-link"
-						th:href="@{'/users/page/' + ${totalPage}+'?sortField='+${SortField}+'&sortDir='+${SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">Last</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
+		
+		
 	
 
 	</div>
+	<div th:replace="fragments/pagination ::pagination('/users','users')"></div>
 	<div th:replace="fragments/model_fragments::confirm_modal"></div>
 	<div th:replace="fragments/footer::footer_page"></div>
      <script th:src="@{/js/common_list.js}"></script>

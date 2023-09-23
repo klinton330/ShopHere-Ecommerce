@@ -32,17 +32,31 @@ public class CategoryController {
 	// Get Mapping controller
 	@GetMapping("categories")
 	public String listAllCategories(@Param("sortDir") String sortDir, Model model) {
+		return listByPage(1, sortDir, model);
+	}
+
+	@GetMapping("/categories/page/{pageNum}")
+	public String listByPage(@PathVariable (name = "pageNum") int pageNum ,@Param("sortDir") String sortDir, Model model) {
 		if (sortDir == null || sortDir.isEmpty())
 			sortDir = "asc";
 		LOGGER.info("GET:/Categories:Sorting Direction:" + sortDir);
-		List<Category> listOfAllCategory = categoryService.listAll(sortDir);
+		CategoryPageInfo pageInfo=new CategoryPageInfo();
+		List<Category> listOfAllCategory = categoryService.listAll(pageInfo,pageNum,sortDir);
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+		model.addAttribute("totalPage",pageInfo.getTotalPages());
+		model.addAttribute("totalItems",pageInfo.getTotalElements());
+		model.addAttribute("currentPage",pageNum);
 		model.addAttribute("listCategories", listOfAllCategory);
+		model.addAttribute("SortField", "name");
+		model.addAttribute("SortDir", sortDir);
 		model.addAttribute("reverseSortDir", reverseSortDir);
+		LOGGER.info("Total Pages:"+pageInfo.getTotalPages());
+		LOGGER.info("Current Page:"+pageNum);
+		LOGGER.info("Total Categories in eachPage:"+pageInfo.getTotalElements());
 		LOGGER.info("Total Length of Category:" + listOfAllCategory.size());
 		return "category/categories";
+		
 	}
-
 	@GetMapping("/categories/new")
 	public String newCategory(Model model) {
 		LOGGER.info("/categories/new");

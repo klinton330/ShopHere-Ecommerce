@@ -8,12 +8,14 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.support.Repositories;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.shophere.admin.Repository.CatagoryRepository;
+import com.shophere.admin.controller.CategoryPageInfo;
 import com.shophere.admin.exception.CategoryNotFoundException;
 import com.shopme.common.entity.Category;
 
@@ -25,7 +27,8 @@ public class CategoryService {
 	@Autowired
 	private CatagoryRepository catagoryRepository;
 
-	public List<Category> listAll(String sortDir) {
+	private static final int ROOT_CATEGORIES_PER_PAGE=2;
+	public List<Category> listAll(CategoryPageInfo categoryPageInfo,int pageNum,String sortDir) {
 		Sort sort = Sort.by("name");
 		if (sortDir == null || sortDir.isEmpty())
 			sort = sort.ascending();
@@ -35,7 +38,11 @@ public class CategoryService {
 			else if (sortDir.equals("desc"))
 				sort = sort.descending();
 		}
-		List<Category> rootCategories = catagoryRepository.listRootCategories(sort);
+		Pageable pageable=PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
+		Page<Category> pageCategories = catagoryRepository.listRootCategories(pageable);
+		List<Category>rootCategories=pageCategories.getContent();
+		categoryPageInfo.setTotalElements(pageCategories.getTotalElements());
+		categoryPageInfo.setTotalPages(pageCategories.getTotalPages());
 		return listHierarchicakCategories(rootCategories, sortDir);
 	}
 

@@ -32,28 +32,39 @@ public class CategoryController {
 	// Get Mapping controller
 	@GetMapping("categories")
 	public String listAllCategories(@Param("sortDir") String sortDir, Model model) {
-		return listByPage(1, sortDir, model);
+		return listByPage(1, sortDir, null,model);
 	}
 
 	@GetMapping("/categories/page/{pageNum}")
-	public String listByPage(@PathVariable (name = "pageNum") int pageNum ,@Param("sortDir") String sortDir, Model model) {
+	public String listByPage(@PathVariable (name = "pageNum") int pageNum ,
+			@Param("sortDir") String sortDir, 
+			@Param("keyword")String keyword,Model model) {
 		if (sortDir == null || sortDir.isEmpty())
 			sortDir = "asc";
 		LOGGER.info("GET:/Categories:Sorting Direction:" + sortDir);
 		CategoryPageInfo pageInfo=new CategoryPageInfo();
-		List<Category> listOfAllCategory = categoryService.listAll(pageInfo,pageNum,sortDir);
+		List<Category> listOfAllCategory = categoryService.listAll(pageInfo,pageNum,sortDir,keyword);
+		long startCount = (pageNum - 1) *  categoryService.ROOT_CATEGORIES_PER_PAGE+ 1; // 0,5
+		long endCount = startCount + categoryService.ROOT_CATEGORIES_PER_PAGE - 1;// 4,9no
+		if (endCount > pageInfo.getTotalElements()) {
+			endCount =  pageInfo.getTotalElements();
+		}
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		model.addAttribute("totalPage",pageInfo.getTotalPages());
 		model.addAttribute("totalItems",pageInfo.getTotalElements());
 		model.addAttribute("currentPage",pageNum);
 		model.addAttribute("listCategories", listOfAllCategory);
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
 		model.addAttribute("SortField", "name");
 		model.addAttribute("SortDir", sortDir);
 		model.addAttribute("reverseSortDir", reverseSortDir);
+		model.addAttribute("keyword", keyword);
 		LOGGER.info("Total Pages:"+pageInfo.getTotalPages());
 		LOGGER.info("Current Page:"+pageNum);
 		LOGGER.info("Total Categories in eachPage:"+pageInfo.getTotalElements());
 		LOGGER.info("Total Length of Category:" + listOfAllCategory.size());
+		LOGGER.info("Search Keyword:" + keyword);
 		return "category/categories";
 		
 	}

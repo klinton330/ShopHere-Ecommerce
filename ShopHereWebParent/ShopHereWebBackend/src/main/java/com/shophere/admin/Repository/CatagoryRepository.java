@@ -31,6 +31,8 @@ public interface CatagoryRepository extends JpaRepository<Category, Integer> {
 	public void updateEnabledStatus(Integer id, boolean enabled);
 	
 	public Long countById(Integer id);
+	@Query(value = "SELECT c from Category c Where c.name LIKE %?1%")
+	public Page<Category>search(String keyword,Pageable pageable);
 	
 
 }

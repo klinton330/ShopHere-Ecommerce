@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+	<div th:fragment="search_form(moduleURL)">
+		<div class="pl-5 mt-2">
+		<form th:action="@{${moduleURL}}" class="form-inline">
+			Filter: &nbsp; <input type="hidden" name="sortField"
+				th:value="${SortField}" /> <input type="hidden" name="sortDir"
+				th:value="${SortDir}" /> <input type="search" name="keyword"
+				th:value="${keyword}" class="form-control" required /> &nbsp;&nbsp;
+			<input type="submit" value="Search" class="btn btn-primary" />
+			&nbsp; <input type="reset" value="Clear" class="btn btn-danger"
+				onclick="clearFilter()" />
+		</form>
+		</div>
+	</div>

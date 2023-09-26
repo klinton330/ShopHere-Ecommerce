@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="https://thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-<head th:replace="fragments/page_header::page_head('Category-ShopHereAdmin')"></head>
+<head
+	th:replace="fragments/page_header::page_head('Category-ShopHereAdmin')"></head>
 
 
 <body>
@@ -10,9 +12,10 @@
 		<h2 class="text-center">Manage Category</h2>
 	</div>
 	<div class="float-right pr-5">
-		<a th:href="@{/categories/new}"><span class="fas fa-user-plus fa-lg-custom"></span></a> &nbsp;&nbsp; <a
-			th:href="@{/}"><span class="fas fa-file-csv fa-lg-custom"></span></a>
-		&nbsp;
+		<a th:href="@{/categories/new}"><span
+			class="fas fa-user-plus fa-lg-custom"></span></a> &nbsp;&nbsp; <a
+			th:href="@{/categories/export/csv}"><span
+			class="fas fa-file-csv fa-lg-custom"></span></a> &nbsp;
 	</div>
 
 
@@ -21,16 +24,18 @@
 	<div class="table-content">
 		<div th:if="${message!=null}" class="alert alert-success text-center">
 			[[${message}]]</div>
-		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+		<table
+			class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
 				<tr>
 					<th>ID</th>
 					<th>Category Image</th>
-					<th><a class="text-white" th:href="@{'/categories/page/'+${currentPage}+'?sortDir='+${reverseSortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">
+					<th><a class="text-white"
+						th:href="@{'/categories/page/'+${currentPage}+'?sortDir='+${reverseSortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">
 							Category Name</a> <span
-							th:class="${reverseSortDir=='asc'?'fas fa-sort-down':'fas fa-sort-up'}"></span></th>
+						th:class="${reverseSortDir=='asc'?'fas fa-sort-down':'fas fa-sort-up'}"></span></th>
 					<!--<th th:replace="fragments/user_list_fragment::column_link('name','Category Name')"></th>-->
-					<th>Alias</th>
+					<th class="hideable-column">Alias</th>
 					<th>Enabled</th>
 					<th>Action</th>
 				</tr>
@@ -40,38 +45,45 @@
 			<tbody>
 				<tr th:each="category:${listCategories}">
 					<td>[[${category.id}]]</td>
-					<td><img th:if="${category.imagePath==null}" th:src="@{${category.imagePath}}" width="100px"
-							height="100px"></img>
-						<img th:if="${category.imagePath!=null}" th:src="@{${category.imagePath}}" width="100px"
-							height="100px"></img>
+					<td><img th:if="${category.imagePath==null}"
+						th:src="@{${category.imagePath}}" width="100px" height="100px"></img>
+						<img th:if="${category.imagePath!=null}"
+						th:src="@{${category.imagePath}}" width="100px" height="100px"></img>
 					</td>
 					<td>[[${category.name}]]</td>
-					<td>[[${category.alias}]]</td>
-					<td><a th:if="${category.enabled==true}" class="fas fa-check-circle fa-lg" style="color: #70db06;"
-							th:href="@{'/categories/'+${category.id}+'/enabled/false'}" title="Disable user"></a> <a
-							th:if="${category.enabled==false}" class="fas fa-check-circle fa-lg" style="color: black;"
-							th:href="@{'/categories/'+${category.id}+'/enabled/true'}" title="Enable user"></a></td>
+					<td class="hideable-column">[[${category.alias}]]</td>
+					<td><a th:if="${category.enabled==true}"
+						class="fas fa-check-circle fa-lg" style="color: #70db06;"
+						th:href="@{'/categories/'+${category.id}+'/enabled/false'}"
+						title="Disable user"></a> <a th:if="${category.enabled==false}"
+						class="fas fa-check-circle fa-lg" style="color: black;"
+						th:href="@{'/categories/'+${category.id}+'/enabled/true'}"
+						title="Enable user"></a></td>
 
 					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-							th:href="@{'/categories/edit/'+${category.id}}" title="Edit the user"></a>
-						&nbsp;
-						<th:block th:if="${category.hasChildren==false}">
-							<a class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
-								th:href="@{'/categories/delete/'+${category.id}}" th:entityId="${category.id}"
-								title="Delete the User"></a>
-					</td>
+						th:href="@{'/categories/edit/'+${category.id}}"
+						title="Edit the user"></a> &nbsp; <th:block
+							th:if="${category.hasChildren==false}">
+							<a class="fas fa-trash-alt fa-lg link-delete"
+								style="color: #f50000;"
+								th:href="@{'/categories/delete/'+${category.id}}"
+								th:entityId="${category.id}" title="Delete the User"></a></td>
 					</th:block>
 				</tr>
 			</tbody>
 
 		</table>
 	</div>
+
 	<div th:if="${keyword!=null}" class="text-center">
-		<span>Search Result does not show Categories in hierarchical form</span>
-		<div th:replace="fragments/pagination ::pagination('/categories','categories')"></div>
+		<span>Search Result does not show Categories in hierarchical
+			form</span>
+		<div
+			th:replace="fragments/pagination ::pagination('/categories','categories')"></div>
 	</div>
 	<div th:unless="${keyword!=null}">
-		<div th:replace="fragments/pagination ::pagination('/categories','top level categories')"></div>
+		<div
+			th:replace="fragments/pagination ::pagination('/categories','top level categories')"></div>
 	</div>
 	<div th:replace="fragments/model_fragments::confirm_modal"></div>
 	<div th:replace="fragments/footer::footer_page"></div>

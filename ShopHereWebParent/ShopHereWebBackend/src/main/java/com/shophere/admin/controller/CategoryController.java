@@ -19,9 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shophere.admin.exception.CategoryNotFoundException;
+import com.shophere.admin.export.CategoryCSVExporter;
 import com.shophere.admin.service.CategoryService;
 import com.shophere.admin.utils.FileUploadUtil;
 import com.shopme.common.entity.Category;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class CategoryController {
@@ -32,27 +35,26 @@ public class CategoryController {
 	// Get Mapping controller
 	@GetMapping("categories")
 	public String listAllCategories(@Param("sortDir") String sortDir, Model model) {
-		return listByPage(1, sortDir, null,model);
+		return listByPage(1, sortDir, null, model);
 	}
 
 	@GetMapping("/categories/page/{pageNum}")
-	public String listByPage(@PathVariable (name = "pageNum") int pageNum ,
-			@Param("sortDir") String sortDir, 
-			@Param("keyword")String keyword,Model model) {
+	public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortDir") String sortDir,
+			@Param("keyword") String keyword, Model model) {
 		if (sortDir == null || sortDir.isEmpty())
 			sortDir = "asc";
 		LOGGER.info("GET:/Categories:Sorting Direction:" + sortDir);
-		CategoryPageInfo pageInfo=new CategoryPageInfo();
-		List<Category> listOfAllCategory = categoryService.listAll(pageInfo,pageNum,sortDir,keyword);
-		long startCount = (pageNum - 1) *  categoryService.ROOT_CATEGORIES_PER_PAGE+ 1; // 0,5
+		CategoryPageInfo pageInfo = new CategoryPageInfo();
+		List<Category> listOfAllCategory = categoryService.listAll(pageInfo, pageNum, sortDir, keyword);
+		long startCount = (pageNum - 1) * categoryService.ROOT_CATEGORIES_PER_PAGE + 1; // 0,5
 		long endCount = startCount + categoryService.ROOT_CATEGORIES_PER_PAGE - 1;// 4,9no
 		if (endCount > pageInfo.getTotalElements()) {
-			endCount =  pageInfo.getTotalElements();
+			endCount = pageInfo.getTotalElements();
 		}
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
-		model.addAttribute("totalPage",pageInfo.getTotalPages());
-		model.addAttribute("totalItems",pageInfo.getTotalElements());
-		model.addAttribute("currentPage",pageNum);
+		model.addAttribute("totalPage", pageInfo.getTotalPages());
+		model.addAttribute("totalItems", pageInfo.getTotalElements());
+		model.addAttribute("currentPage", pageNum);
 		model.addAttribute("listCategories", listOfAllCategory);
 		model.addAttribute("startCount", startCount);
 		model.addAttribute("endCount", endCount);
@@ -60,14 +62,15 @@ public class CategoryController {
 		model.addAttribute("SortDir", sortDir);
 		model.addAttribute("reverseSortDir", reverseSortDir);
 		model.addAttribute("keyword", keyword);
-		LOGGER.info("Total Pages:"+pageInfo.getTotalPages());
-		LOGGER.info("Current Page:"+pageNum);
-		LOGGER.info("Total Categories in eachPage:"+pageInfo.getTotalElements());
+		LOGGER.info("Total Pages:" + pageInfo.getTotalPages());
+		LOGGER.info("Current Page:" + pageNum);
+		LOGGER.info("Total Categories in eachPage:" + pageInfo.getTotalElements());
 		LOGGER.info("Total Length of Category:" + listOfAllCategory.size());
 		LOGGER.info("Search Keyword:" + keyword);
 		return "category/categories";
-		
+
 	}
+
 	@GetMapping("/categories/new")
 	public String newCategory(Model model) {
 		LOGGER.info("/categories/new");
@@ -152,7 +155,7 @@ public class CategoryController {
 	public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
 		try {
 			categoryService.deleteCategory(id);
-			String categoryDir="../category-images/"+id;
+			String categoryDir = "../category-images/" + id;
 			FileUploadUtil.removeDir(categoryDir);
 			LOGGER.info("The Category id:" + id + "+has been deleted Successfully");
 			redirectAttributes.addAttribute("message", "The Category id:" + id + "+has been deleted Successfully");
@@ -163,5 +166,12 @@ public class CategoryController {
 			return "redirect:/categories";
 		}
 
+	}
+
+	@GetMapping("/categories/export/csv")
+	public void exportCSV(HttpServletResponse response) throws IOException {
+		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+		CategoryCSVExporter categoryCSVExporter = new CategoryCSVExporter();
+		categoryCSVExporter.export(listCategories, response);
 	}
 }

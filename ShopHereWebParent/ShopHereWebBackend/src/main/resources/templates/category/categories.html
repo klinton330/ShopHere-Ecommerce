@@ -30,11 +30,9 @@
 				<tr>
 					<th>ID</th>
 					<th>Category Image</th>
-					<th><a class="text-white"
-						th:href="@{'/categories/page/'+${currentPage}+'?sortDir='+${reverseSortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">
-							Category Name</a> <span
-						th:class="${reverseSortDir=='asc'?'fas fa-sort-down':'fas fa-sort-up'}"></span></th>
-					<!--<th th:replace="fragments/user_list_fragment::column_link('name','Category Name')"></th>-->
+
+					<th
+						th:replace="fragments/list_fragment::column_link('/categories','name','Category Name')" />
 					<th class="hideable-column">Alias</th>
 					<th>Enabled</th>
 					<th>Action</th>
@@ -52,23 +50,24 @@
 					</td>
 					<td>[[${category.name}]]</td>
 					<td class="hideable-column">[[${category.alias}]]</td>
-					<td><a th:if="${category.enabled==true}"
-						class="fas fa-check-circle fa-lg" style="color: #70db06;"
-						th:href="@{'/categories/'+${category.id}+'/enabled/false'}"
-						title="Disable user"></a> <a th:if="${category.enabled==false}"
-						class="fas fa-check-circle fa-lg" style="color: black;"
-						th:href="@{'/categories/'+${category.id}+'/enabled/true'}"
-						title="Enable user"></a></td>
+					<td>
+						<div
+							th:replace="fragments/list_fragment::enable_status(${category.enabled},'category','/categories/'+${category.id})" />
+					</td>
 
-					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-						th:href="@{'/categories/edit/'+${category.id}}"
-						title="Edit the user"></a> &nbsp; <th:block
-							th:if="${category.hasChildren==false}">
-							<a class="fas fa-trash-alt fa-lg link-delete"
-								style="color: #f50000;"
-								th:href="@{'/categories/delete/'+${category.id}}"
-								th:entityId="${category.id}" title="Delete the User"></a></td>
-					</th:block>
+					<td>
+						<div style="display: flex;">
+							<div
+								th:replace="fragments/list_fragment::edit('Category','/categories/edit/'+${category.id},${category.id})"></div>
+							&nbsp;
+
+							<th:block th:if="${category.hasChildren==false}">
+
+								<div
+									th:replace="fragments/list_fragment::delete('Category','/categories/delete/'+${category.id},${category.id})"></div>
+							</th:block>
+						</div>
+					</td>
 				</tr>
 			</tbody>
 

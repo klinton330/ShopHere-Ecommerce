@@ -20,13 +20,13 @@
 			class="fas fa-file-pdf fa-lg-custom"></span></a>
 	</div>
 
-<div th:replace="fragments/search ::search_form('/users/page/1')"></div>
+	<div th:replace="fragments/search ::search_form('/users/page/1')"></div>
 
 
 	<div class="table-content">
-	
-	<div th:if="${message!=null}" class="alert alert-success text-center">
-		[[${message}]]</div>
+
+		<div th:if="${message!=null}" class="alert alert-success text-center">
+			[[${message}]]</div>
 		<table
 			class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
@@ -34,7 +34,7 @@
 					<th>User ID</th>
 					<th>Email</th>
 					<th
-						th:replace="fragments/user_list_fragment::column_link('firstName','First Name')" />
+						th:replace="fragments/list_fragment::column_link('users','firstName','First Name')" />
 					<th>Last Name</th>
 					<th>Roles</th>
 					<th>Photos</th>
@@ -56,32 +56,31 @@
 						th:if="${user.photos!=null}" th:src="@{${user.photoImagePath}}"
 						style="width: 100px; height: 100px" /></td>
 
-					<td><a th:if="${user.enabled==true}"
-						class="fas fa-check-circle fa-lg" style="color: #70db06;"
-						th:href="@{'/users/'+${user.id}+'/enabled/false'}"
-						title="Disable user"></a> <a th:if="${user.enabled==false}"
-						class="fas fa-check-circle fa-lg" style="color: black;"
-						th:href="@{'/users/'+${user.id}+'/enabled/true'}"
-						title="Enable user"></a></td>
-					<td><a class="fas fa-user-edit fa-lg " style="color: #007bff"
-						th:href="@{'/users/edit/'+${user.id}}" title="Edit the user"></a>
-						
-						<span>|</span> <a class="fas fa-trash-alt fa-lg link-delete"
-						style="color: #f50000;" th:href="@{'/users/delete/'+${user.id}}"
-						th:entityId="${user.id}" title="Delete the User"></a></td>
+					<td>
+						<div
+							th:replace="fragments/list_fragment::enable_status(${user.enabled},'user','/users/'+${user.id})">
+						</div>
+					</td>
+					
+					<td> 
+					   <div style="display: flex;">
+						<div th:replace="fragments/list_fragment::edit('user','/users/edit/'+${user.id},${user.id})"></div> &nbsp; &nbsp;
+                   		<div th:replace="fragments/list_fragment::delete('user','/users/delete/'+${user.id},${user.id})"></div>
+                   		</div>
+					</td>
 
 				</tr>
 			</tbody>
 		</table>
-		
-		
-	
+
+
+
 
 	</div>
 	<div th:replace="fragments/pagination ::pagination('/users','users')"></div>
 	<div th:replace="fragments/model_fragments::confirm_modal"></div>
 	<div th:replace="fragments/footer::footer_page"></div>
-     <script th:src="@{/js/common_list.js}"></script>
+	<script th:src="@{/js/common_list.js}"></script>
 	<script type="text/javascript">
 	
 	     moduleURL="[[@{/users}]]"

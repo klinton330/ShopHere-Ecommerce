@@ -1,18 +1,36 @@
+
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
-<head>
-<meta charset="ISO-8859-1">
-
-</head>
 <body>
-	<th th:fragment="column_link(fieldName,columnLabel)">
-	<a
+	<th th:fragment="column_link(moduleURl,fieldName,columnLabel)"><a
 		class="text-white"
-		th:href=
-		"@{'/users/page/'+${currentPage}+'?sortField='+${fieldName}+'&sortDir='+${sortField!=fieldName?reverseSortDir:SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">
-			[[${columnLabel}]]
-	</a> <span th:if="${SortField==fieldName}"
+		th:href="@{${moduleURl}+'/page/'+${currentPage}+'?sortField='+${fieldName}+'&sortDir='+${sortField!=fieldName?reverseSortDir:SortDir}+${keyword!=null ? '&keyword='+keyword:' '}}">
+			[[${columnLabel}]] </a> <span th:if="${SortField==fieldName}"
 		th:class="${SortDir=='asc'?'fas fa-sort-up':'fas fa-sort-down'}"></span>
 	</th>
+
+	<div th:fragment="enable_status(enabled,entityName,entityURL)">
+		<a th:if="${enabled==true}" class="fas fa-check-circle fa-lg"
+			style="color: #70db06;" th:href="@{${entityURL}+'/enabled/false'}"
+			th:title="'Disable this '+${entityName}"> </a> <a
+			th:if="${enabled==false}" class="fas fa-check-circle fa-lg"
+			style="color: black;" th:href="@{${entityURL}+'/enabled/true'}"
+			th:title="'Enable this '+${entityName}"></a>
+	</div>
+
+	<div th:fragment="edit(entityName,editURL,entityId)">
+		<a class="fas fa-user-edit fa-lg " style="color: #007bff"
+			th:href="@{${editURL}}" 
+			th:entityId="${entityId}"
+			th:title="'Edit the '+${entityName} "></a>
+	</div>
+	<!-- Delete -->
+	<div th:fragment="delete(entityName,deleteURL,entityId)">
+		<a class="fas fa-trash-alt fa-lg link-delete" style="color: #f50000;"
+			th:href="@{${deleteURL}}"
+			th:entityId="${entityId}" th:title="'Delete the '+${entityName}"></a>
+	</div>
+
+	
 </body>
 </html>
